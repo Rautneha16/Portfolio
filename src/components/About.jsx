@@ -1,6 +1,47 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Download, ThumbsUp } from 'lucide-react';
+import { fadeInUpVariant, hoverScale } from '../utils/animations';
+
+const TypewriterText = ({ text, delay = 0 }) => {
+  const [displayedText, setDisplayedText] = React.useState('');
+  const [started, setStarted] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!started) return;
+    let i = 0;
+    const interval = setInterval(() => {
+      setDisplayedText(text.slice(0, i + 1));
+      i++;
+      if (i >= text.length) clearInterval(interval);
+    }, 15);
+    return () => clearInterval(interval);
+  }, [started, text]);
+
+  return (
+    <motion.span
+      onViewportEnter={() => {
+        setTimeout(() => setStarted(true), delay);
+      }}
+      viewport={{ once: true, margin: "-100px" }}
+    >
+      {displayedText}
+      <motion.span
+        animate={{ opacity: [1, 0] }}
+        transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
+        style={{
+          display: 'inline-block',
+          width: '8px',
+          height: '1em',
+          background: 'var(--accent-primary)',
+          marginLeft: '4px',
+          verticalAlign: 'middle',
+          boxShadow: '0 0 8px var(--accent-primary)'
+        }}
+      />
+    </motion.span>
+  );
+};
 
 const About = () => {
   const highlights = [
@@ -12,12 +53,12 @@ const About = () => {
   ];
 
   return (
-    <section id="about" className="section">
+    <section id="about" className="section" style={{ paddingBottom: '10vh' }}>
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        variants={fadeInUpVariant}
+        initial="hidden"
+        whileInView="visible"
         viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
       >
         <div className="grid grid-2" style={{ gap: '4rem', alignItems: 'center' }}>
 
@@ -32,7 +73,7 @@ const About = () => {
             <div style={{ position: 'relative' }}>
               {/* Decorative background shape */}
               <div style={{
-                width: '320px',
+                width: 'min(100%, 320px)',
                 height: '380px',
                 borderRadius: '16px',
                 background: 'var(--card-bg)',
@@ -48,14 +89,15 @@ const About = () => {
                   padding: '2rem',
                 }}>
                   <motion.div
-                    animate={{ scale: [1, 1.05, 1] }}
-                    transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
+                    animate={{ scale: [1, 1.05, 1], rotate: [0, 2, -2, 0] }}
+                    transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
+                    whileHover={{ scale: 1.15, rotate: 5, textShadow: '0 0 20px var(--accent-primary)' }}
                     style={{
                       fontSize: '5rem',
                       fontWeight: 900,
-                      fontFamily: "'Poppins', sans-serif",
                       color: 'var(--accent-primary)',
                       lineHeight: 1,
+                      cursor: 'pointer',
                     }}
                   >
                     1+
@@ -67,7 +109,6 @@ const About = () => {
                     textTransform: 'uppercase',
                     letterSpacing: '0.05em',
                     marginTop: '0.5rem',
-                    fontFamily: "'Poppins', sans-serif",
                     maxWidth: '200px',
                   }}>
                     Year of Best & Successful Work Experience
@@ -77,8 +118,9 @@ const About = () => {
 
               {/* Floating accent badge */}
               <motion.div
-                animate={{ y: [0, -8, 0] }}
+                animate={{ y: [0, -12, 0], rotate: [0, -5, 5, 0] }}
                 transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
+                whileHover={{ scale: 1.2, rotate: 15 }}
                 style={{
                   position: 'absolute',
                   bottom: '-15px',
@@ -102,13 +144,12 @@ const About = () => {
 
           {/* Right Column — Text */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            variants={fadeInUpVariant}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
           >
             <span style={{
-              fontFamily: "'Poppins', sans-serif",
               fontWeight: 800,
               fontSize: '0.85rem',
               color: 'var(--accent-primary)',
@@ -121,7 +162,6 @@ const About = () => {
             </span>
 
             <h2 style={{
-              fontFamily: "'Poppins', sans-serif",
               fontWeight: 900,
               fontSize: 'clamp(1.8rem, 3vw, 2.5rem)',
               color: 'var(--text-primary)',
@@ -133,16 +173,18 @@ const About = () => {
 
             <p className="text-muted" style={{
               fontSize: '1.05rem', lineHeight: 1.8, marginBottom: '1rem',
-              fontFamily: "'Mulish', sans-serif"
+              fontFamily: "'Share Tech Mono', 'Mulish', monospace",
+              minHeight: '80px' // prevents layout jump while typing
             }}>
-              Hello! I'm Neha, an aspiring web developer passionate about crafting exceptional digital experiences. With a BE in Information Technology from Savitribai Phule Pune University and hands-on industry experience, I specialize in building responsive, interactive frontend applications.
+              <TypewriterText text="Hello! I'm Neha, an aspiring web developer passionate about crafting exceptional digital experiences. With a BE in Information Technology from Savitribai Phule Pune University and hands-on industry experience, I specialize in building responsive, interactive frontend applications." delay={300} />
             </p>
 
             <p className="text-muted" style={{
               fontSize: '1.05rem', lineHeight: 1.8, marginBottom: '1.5rem',
-              fontFamily: "'Mulish', sans-serif"
+              fontFamily: "'Share Tech Mono', 'Mulish', monospace",
+              color: 'var(--accent-primary)'
             }}>
-              I don't just build websites — I craft experiences that make a difference.
+              <TypewriterText text="> I don't just build websites — I craft experiences that make a difference." delay={3500} />
             </p>
 
             {/* Highlight bullets */}
@@ -154,15 +196,20 @@ const About = () => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.4 + i * 0.08 }}
+                  whileHover={{ x: 10, scale: 1.02, color: 'var(--text-primary)' }}
                   style={{
                     display: 'flex', alignItems: 'center', gap: '0.75rem',
                     marginBottom: '0.6rem',
                     fontSize: '0.95rem',
                     color: 'var(--text-secondary)',
-                    fontFamily: "'Mulish', sans-serif",
+                    cursor: 'default',
                   }}
                 >
-                  <span style={{ color: 'var(--accent-primary)', fontSize: '1.1rem' }}>👍</span>
+                  <motion.span
+                    whileHover={{ scale: 1.3, rotate: 15 }}
+                    style={{ color: 'var(--accent-primary)', fontSize: '1.1rem', display: 'inline-block' }}
+                  >⚪
+                  </motion.span>
                   {item}
                 </motion.div>
               ))}

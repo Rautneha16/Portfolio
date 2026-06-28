@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Download } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import ThemeToggle from './ThemeToggle';
+import logoImage from './images/logo.png';
 
-const Navbar = ({ theme, toggleTheme, installPromptEvent, setInstallPromptEvent }) => {
+const Navbar = ({ installPromptEvent, setInstallPromptEvent }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
@@ -45,19 +45,40 @@ const Navbar = ({ theme, toggleTheme, installPromptEvent, setInstallPromptEvent 
   return (
     <nav style={{
       position: 'fixed',
-      top: 0,
+      top: isScrolled ? '1rem' : 0,
       left: 0,
       right: 0,
       zIndex: 1000,
-      transition: 'all 0.3s ease',
-      padding: isScrolled ? '0.75rem 0' : '1.25rem 0',
-      background: isScrolled ? 'var(--glass-bg)' : 'transparent',
-      backdropFilter: isScrolled ? 'blur(12px)' : 'none',
-      borderBottom: isScrolled ? '1px solid var(--glass-border)' : 'none',
+      transition: 'padding 0.4s ease, background 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease, top 0.4s ease',
+      padding: isScrolled ? '0.5rem 0' : '1.25rem 0',
+      background: 'transparent',
+      backdropFilter: 'none',
+      WebkitBackdropFilter: 'none',
+      borderBottom: 'none',
+      boxShadow: 'none',
     }}>
       <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <a href="#" className="heading-md" style={{ margin: 0, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-          <span className="text-gradient" style={{ fontWeight: 900 }}>Neha</span> Raut.
+        <a href="#" className="heading-md" style={{
+          margin: 0,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+          fontWeight: 900,
+          fontSize: '1.1rem',
+          letterSpacing: '0.08em',
+          color: isScrolled ? 'var(--text-primary)' : '#ffffff',
+          textShadow: isScrolled ? 'none' : '0 0 20px rgba(255,42,122,0.7)',
+          filter: isScrolled ? 'none' : 'drop-shadow(0 0 8px rgba(255,42,122,0.4))',
+          transition: 'color 0.3s ease, text-shadow 0.3s ease',
+          textDecoration: 'none'
+        }}>
+          <img 
+            src={logoImage.src ? logoImage.src : logoImage} 
+            alt="Logo" 
+            style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover' }} 
+            onError={(e) => { e.target.style.display = 'none'; }}
+          />
+          <span className="text-gradient">Neha</span>&nbsp;Raut
         </a>
 
         {/* Desktop Menu */}
@@ -66,23 +87,27 @@ const Navbar = ({ theme, toggleTheme, installPromptEvent, setInstallPromptEvent 
             <li key={link.name}>
               <a 
                 href={link.href} 
-                className="text-muted clickable" 
                 style={{ 
-                  transition: 'var(--transition)',
-                  fontWeight: 600,
-                  fontSize: '0.95rem',
-                  fontFamily: "'Poppins', sans-serif"
+                  transition: 'color 0.2s ease, text-shadow 0.2s ease',
+                  fontWeight: 500,
+                  fontSize: '0.78rem',
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  color: isScrolled ? 'var(--text-primary)' : 'rgba(255,255,255,0.75)',
                 }}
-                onMouseOver={(e) => e.target.style.color = 'var(--accent-primary)'}
-                onMouseOut={(e) => e.target.style.color = 'var(--text-secondary)'}
+                onMouseOver={(e) => {
+                  e.target.style.color = '#00ffff';
+                  e.target.style.textShadow = '0 0 12px rgba(0,255,255,0.8)';
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.color = isScrolled ? 'var(--text-primary)' : 'rgba(255,255,255,0.75)';
+                  e.target.style.textShadow = 'none';
+                }}
               >
                 {link.name}
               </a>
             </li>
           ))}
-          <li>
-            <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
-          </li>
           {installPromptEvent && !isInstalled && (
             <li>
               <motion.button
@@ -91,7 +116,7 @@ const Navbar = ({ theme, toggleTheme, installPromptEvent, setInstallPromptEvent 
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 onClick={handleInstallClick}
-                className="btn clickable"
+                className="btn"
                 style={{
                   padding: '0.5rem 1.1rem',
                   fontSize: '0.82rem',
@@ -107,18 +132,13 @@ const Navbar = ({ theme, toggleTheme, installPromptEvent, setInstallPromptEvent 
               </motion.button>
             </li>
           )}
-          <li>
-            <a href="#contact" className="btn btn-primary clickable" style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem' }}>
-              Let's Talk
-            </a>
-          </li>
         </ul>
 
         {/* Mobile Menu Toggle & ThemeToggle combo */}
         <div style={{ display: 'none', alignItems: 'center', gap: '0.5rem' }} className="mobile-actions">
-          <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
           <button 
             className="mobile-nav-toggle"
+            aria-label="Toggle mobile menu"
             style={{ background: 'none', border: 'none', color: 'var(--text-primary)', cursor: 'pointer', padding: '8px' }}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
@@ -146,8 +166,10 @@ const Navbar = ({ theme, toggleTheme, installPromptEvent, setInstallPromptEvent 
               top: '100%',
               left: 0,
               right: 0,
-              background: 'var(--bg-secondary)',
-              borderBottom: '2px solid var(--border-color)',
+              background: 'rgba(5, 2, 20, 0.75)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              borderBottom: '1px solid rgba(0,255,255,0.2)',
               padding: '1.5rem',
             }}
           >
@@ -156,23 +178,21 @@ const Navbar = ({ theme, toggleTheme, installPromptEvent, setInstallPromptEvent 
                 <li key={link.name} style={{ width: '100%', textAlign: 'center' }}>
                   <a 
                     href={link.href} 
-                    style={{ display: 'block', padding: '0.5rem', fontWeight: 600, color: 'var(--text-primary)' }}
+                    style={{
+                      display: 'block',
+                      padding: '0.5rem',
+                      fontWeight: 500,
+                      fontSize: '0.8rem',
+                      letterSpacing: '0.1em',
+                      textTransform: 'uppercase',
+                      color: 'rgba(255,255,255,0.8)',
+                    }}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {link.name}
                   </a>
                 </li>
               ))}
-              <li style={{ width: '100%', display: 'flex', justifyContent: 'center', pt: '0.5rem' }}>
-                <a 
-                  href="#contact" 
-                  className="btn btn-primary clickable" 
-                  style={{ width: '80%', textAlign: 'center' }}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Let's Talk
-                </a>
-              </li>
             </ul>
           </motion.div>
         )}

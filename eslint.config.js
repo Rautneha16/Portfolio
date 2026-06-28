@@ -1,3 +1,7 @@
+import reactPlugin from 'eslint-plugin-react';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
+import reactRefreshPlugin from 'eslint-plugin-react-refresh';
+
 export default [
   { ignores: ['dist'] },
   {
@@ -16,12 +20,12 @@ export default [
     },
     settings: { react: { version: '18.3' } },
     plugins: {
-      react: require('eslint-plugin-react'),
-      'react-hooks': require('eslint-plugin-react-hooks'),
-      'react-refresh': require('eslint-plugin-react-refresh'),
+      react: reactPlugin,
+      'react-hooks': reactHooksPlugin,
+      'react-refresh': reactRefreshPlugin,
     },
     rules: {
-      ...require('eslint-plugin-react-hooks').configs.recommended.rules,
+      ...reactHooksPlugin.configs.recommended.rules,
       'react/jsx-no-target-blank': 'off',
       'react-refresh/only-export-components': [
         'warn',

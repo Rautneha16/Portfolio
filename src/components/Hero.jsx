@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, Mail } from 'lucide-react';
 import avatarImage from './images/avatar.png';
+import heroVideo from './images/video/video.mp4'; 
 
 const techIcons = [
   { label: 'HTML5', color: '#E44D26', symbol: '<>' },
@@ -24,6 +25,13 @@ const codeLines = [
 
 const Hero = () => {
   const [typedLines, setTypedLines] = useState(0);
+  const sectionRef = useRef(null);
+
+  // Parallax setup
+  const { scrollY } = useScroll();
+  const y1 = useTransform(scrollY, [0, 800], [0, 200]);
+  const y2 = useTransform(scrollY, [0, 800], [0, -150]);
+  const y3 = useTransform(scrollY, [0, 800], [0, 300]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -39,70 +47,144 @@ const Hero = () => {
   }, []);
 
   return (
-    <section id="home" style={{ 
-      minHeight: '100vh', 
-      display: 'flex', 
-      alignItems: 'center', 
-      paddingTop: '6rem',
+    <section id="home" ref={sectionRef} style={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      paddingTop: '3rem',
       position: 'relative',
       overflow: 'hidden'
     }}>
+
+      {/* ===== Background Video ===== */}
+      <video
+        autoPlay
+        loop
+        muted
+        defaultMuted
+        playsInline
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          zIndex: 0,
+          pointerEvents: 'none',
+        }}
+      >
+        <source src={heroVideo} type="video/mp4" />
+      </video>
+
+      {/* Dark gradient overlay for readability */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: 'linear-gradient(135deg, rgba(10,5,30,0.88) 0%, rgba(20,5,50,0.75) 50%, rgba(10,5,30,0.90) 100%)',
+        zIndex: 1,
+        pointerEvents: 'none',
+      }} />
+
+      {/* Neon scanline effect */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,255,0.015) 2px, rgba(0,255,255,0.015) 4px)',
+        zIndex: 2,
+        pointerEvents: 'none',
+      }} />
+
+      {/* ===== Parallax Floating Elements ===== */}
+      <motion.div
+        animate={{ rotate: 360, y: [0, -20, 0] }}
+        transition={{ rotate: { duration: 20, repeat: Infinity, ease: 'linear' }, y: { duration: 4, repeat: Infinity, ease: 'easeInOut' } }}
+        style={{ position: 'absolute', top: '20%', left: '10%', y: y1, zIndex: 2, opacity: 0.4, color: '#00ffff', fontFamily: "'Share Tech Mono', monospace", fontSize: '2rem', textShadow: '0 0 10px #00ffff', pointerEvents: 'none', display: 'inline-block' }}
+      >
+        {`</>`}
+      </motion.div>
+      <motion.div
+        animate={{ rotate: -360, y: [0, 20, 0] }}
+        transition={{ rotate: { duration: 25, repeat: Infinity, ease: 'linear' }, y: { duration: 5, repeat: Infinity, ease: 'easeInOut' } }}
+        style={{ position: 'absolute', top: '60%', left: '80%', y: y2, zIndex: 2, opacity: 0.3, color: '#ff2a7a', fontFamily: "'Share Tech Mono', monospace", fontSize: '3.5rem', textShadow: '0 0 10px #ff2a7a', pointerEvents: 'none', display: 'inline-block' }}
+      >
+        {`{ }`}
+      </motion.div>
+      <motion.div
+        animate={{ rotate: 180, scale: [1, 1.2, 1] }}
+        transition={{ rotate: { duration: 15, repeat: Infinity, ease: 'linear' }, scale: { duration: 3, repeat: Infinity, ease: 'easeInOut' } }}
+        style={{ position: 'absolute', top: '75%', left: '20%', y: y3, zIndex: 2, opacity: 0.25, color: '#a855f7', fontFamily: "'Share Tech Mono', monospace", fontSize: '1.8rem', textShadow: '0 0 10px #a855f7', pointerEvents: 'none', display: 'inline-block' }}
+      >
+        {`[ ]`}
+      </motion.div>
+      <motion.div style={{ position: 'absolute', top: '15%', right: '15%', y: y1, zIndex: 2, opacity: 0.3, border: '2px solid #ff5e97', width: '50px', height: '50px', borderRadius: '50%', boxShadow: '0 0 15px #ff5e97', pointerEvents: 'none' }} />
+      <motion.div style={{ position: 'absolute', bottom: '10%', right: '35%', y: y2, zIndex: 2, opacity: 0.2, border: '2px dashed #00ffff', width: '80px', height: '80px', borderRadius: '10%', transform: 'rotate(45deg)', pointerEvents: 'none' }} />
+
       {/* Signature glowing background blobs */}
       <div className="glow-blob animate-pulse-soft" style={{
         top: '10%', left: '-8%',
         width: '350px', height: '350px',
         background: 'var(--accent-primary)',
+        zIndex: 3,
       }} />
       <div className="glow-blob animate-pulse-soft" style={{
         bottom: '5%', right: '-5%',
         width: '450px', height: '450px',
         background: 'var(--accent-secondary)',
-        animationDelay: '2s'
+        animationDelay: '2s',
+        zIndex: 3,
       }} />
 
-      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+      <div className="container" style={{ position: 'relative', zIndex: 4 }}>
         <div className="grid grid-2" style={{ alignItems: 'center' }}>
-          
+
           {/* Left Column — Text */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <span style={{ 
+            <span style={{
               display: 'inline-block',
-              fontFamily: "'Poppins', sans-serif",
-              fontWeight: 800,
+              fontFamily: "'Share Tech Mono', monospace",
+              fontWeight: 400,
               fontSize: '0.9rem',
-              color: 'var(--accent-primary)',
+              color: '#00ffff',
               textTransform: 'uppercase',
-              letterSpacing: '0.15em',
-              marginBottom: '1rem'
+              letterSpacing: '0.2em',
+              marginBottom: '1rem',
+              textShadow: '0 0 10px rgba(0,255,255,0.8)',
             }}>
               Hi there, I'm
             </span>
-            
-            <h1 className="heading-xl" style={{ marginBottom: '1.5rem' }}>
-              <span className="text-gradient">Neha Raut</span>
-            </h1>
-            
-            <p className="text-muted" style={{ 
-              fontSize: '1.15rem', 
-              lineHeight: 1.8, 
-              marginBottom: '2.5rem', 
-              maxWidth: '520px',
-              fontFamily: "'Inter', sans-serif"
+
+            <h1 className="heading-xl" style={{
+              marginBottom: '1.5rem',
+              textShadow: '0 0 30px rgba(255,42,122,0.5), 0 0 60px rgba(124,59,237,0.3)',
+              letterSpacing: '0.06em',
             }}>
-              A passionate <strong style={{ color: 'var(--text-primary)' }}>Web Developer</strong> based in Pune, India. I craft modern, responsive, and highly interactive applications with clean, user-friendly designs.
+              <span className="text-gradient glitch" data-text="Neha Raut">Neha Raut</span>
+            </h1>
+
+            <p style={{
+              fontSize: '1.05rem',
+              lineHeight: 1.8,
+              marginBottom: '2.5rem',
+              maxWidth: '520px',
+              fontWeight: 500,
+              color: 'rgba(220,210,255,0.85)',
+              letterSpacing: '0.03em',
+            }}>
+              A passionate <strong style={{ color: '#00ffff', textShadow: '0 0 8px rgba(0,255,255,0.6)' }}>Web Developer</strong> based in Pune, India. I craft modern, responsive, and highly interactive applications with clean, user-friendly designs.
             </p>
 
             {/* Tech stack icons */}
             <div style={{ marginBottom: '2.5rem' }}>
-              <span className="text-muted" style={{ 
-                fontSize: '0.8rem', fontWeight: 800, 
-                textTransform: 'uppercase', letterSpacing: '0.1em',
+              <span style={{
+                fontSize: '0.75rem', fontWeight: 600,
+                textTransform: 'uppercase', letterSpacing: '0.15em',
                 display: 'block', marginBottom: '0.75rem',
-                fontFamily: "'Poppins', sans-serif"
+                fontFamily: "'Share Tech Mono', monospace",
+                color: 'rgba(0,255,255,0.7)',
               }}>
                 My Core Toolbox
               </span>
@@ -112,23 +194,46 @@ const Hero = () => {
                     key={tech.label}
                     initial={{ opacity: 0, scale: 0 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.8 + i * 0.1, type: 'spring', stiffness: 200 }}
-                    title={tech.label}
-                    className="clickable"
-                    style={{
-                      width: '48px', height: '48px',
-                      borderRadius: '12px',
-                      background: 'var(--card-bg)',
-                      border: '2px solid var(--border-color)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontWeight: 800, fontSize: '1rem',
-                      color: tech.color,
-                      boxShadow: 'var(--box-shadow-chunky)',
-                      fontFamily: "'Poppins', sans-serif",
-                    }}
                     whileHover={{ 
-                      y: -4, 
-                      boxShadow: '6px 6px 0px var(--shadow-color)',
+                      y: -6, 
+                      scale: 1.15,
+                      rotate: [0, -10, 10, -5, 5, 0],
+                    }}
+                    whileTap={{ scale: 0.9 }}
+                    transition={{ 
+                      default: { duration: 0.4 },
+                      opacity: { delay: 0.8 + i * 0.1 },
+                      scale: { delay: 0.8 + i * 0.1, type: 'spring', stiffness: 200 }
+                    }}
+                    title={tech.label}
+                    style={{
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center', 
+                      width: '40px', 
+                      height: '40px', 
+                      background: 'var(--card-bg)', 
+                      border: '2px solid var(--border-color)', 
+                      borderRadius: '8px', 
+                      boxShadow: '2px 2px 0 var(--border-color)', 
+                      color: 'var(--text-primary)', 
+                      transition: 'background-color 0.3s, color 0.3s, box-shadow 0.3s, border-color 0.3s',
+                      fontWeight: 700,
+                      fontFamily: "'Share Tech Mono', monospace",
+                      fontSize: '1rem',
+                      cursor: 'default'
+                    }}
+                    onMouseOver={(e) => { 
+                      e.currentTarget.style.color = 'white'; 
+                      e.currentTarget.style.background = tech.color;
+                      e.currentTarget.style.boxShadow = `0 0 15px ${tech.color}`;
+                      e.currentTarget.style.borderColor = tech.color;
+                    }} 
+                    onMouseOut={(e) => { 
+                      e.currentTarget.style.color = 'var(--text-primary)'; 
+                      e.currentTarget.style.background = 'var(--card-bg)';
+                      e.currentTarget.style.boxShadow = '2px 2px 0 var(--border-color)';
+                      e.currentTarget.style.borderColor = 'var(--border-color)';
                     }}
                   >
                     {tech.symbol}
@@ -136,19 +241,20 @@ const Hero = () => {
                 ))}
               </div>
             </div>
-            
+
             <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap' }}>
-              <a href="#projects" className="btn btn-primary clickable">
+              <a href="#projects" className="btn btn-primary glitch-hover" style={{
+                fontSize: '0.78rem',
+                letterSpacing: '0.1em',
+                boxShadow: '0 0 20px rgba(255,42,122,0.5)',
+              }}>
                 View Projects <ArrowRight size={18} />
-              </a>
-              <a href="#contact" className="btn btn-secondary clickable">
-                Let's Talk <Mail size={18} />
               </a>
             </div>
           </motion.div>
 
           {/* Right Column — Cartoon Avatar & Animated Code Editor */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.3 }}
@@ -159,38 +265,7 @@ const Hero = () => {
               maxWidth: '460px',
               position: 'relative',
             }}>
-              {/* Backside Animated Circle decoration (behind the cartoon avatar) */}
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ repeat: Infinity, duration: 15, ease: 'linear' }}
-                style={{
-                  position: 'absolute',
-                  top: '10px',
-                  right: '20px',
-                  width: '180px',
-                  height: '180px',
-                  borderRadius: '50%',
-                  border: '3px dashed var(--accent-primary)',
-                  zIndex: 0,
-                  pointerEvents: 'none',
-                }}
-              />
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ repeat: Infinity, duration: 25, ease: 'linear' }}
-                style={{
-                  position: 'absolute',
-                  top: '0px',
-                  right: '10px',
-                  width: '200px',
-                  height: '200px',
-                  borderRadius: '50%',
-                  border: '1.5px solid var(--accent-teal)',
-                  opacity: 0.6,
-                  zIndex: 0,
-                  pointerEvents: 'none',
-                }}
-              />
+              {/* Background rings removed per request */}
 
               {/* Glowing Background Blob */}
               <div style={{
@@ -230,11 +305,10 @@ const Hero = () => {
                   rotate: [0, -3, 3, 0],
                   boxShadow: 'var(--box-shadow-chunky-hover)',
                 }}
-                className="clickable"
               >
-                <img 
-                  src={avatarImage} 
-                  alt="Neha Raut Cartoon Avatar" 
+                <img
+                  src={avatarImage.src}
+                  alt="Neha Raut Cartoon Avatar"
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
               </motion.div>
@@ -262,20 +336,20 @@ const Hero = () => {
                   <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#ff5f57', border: '1px solid rgba(0,0,0,0.2)' }} />
                   <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#febc2e', border: '1px solid rgba(0,0,0,0.2)' }} />
                   <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#28c840', border: '1px solid rgba(0,0,0,0.2)' }} />
-                  <span style={{ 
-                    marginLeft: '12px', fontSize: '0.75rem', 
+                  <span style={{
+                    marginLeft: '12px', fontSize: '0.75rem',
                     color: 'rgba(255,255,255,0.4)',
                     fontWeight: 600,
-                    fontFamily: "'Inter', monospace" 
+                    fontFamily: "'Inter', monospace"
                   }}>
                     neha.js
                   </span>
                 </div>
 
                 {/* Code Body */}
-                <div style={{ 
-                  padding: '20px 24px', 
-                  fontFamily: "'Courier New', monospace",
+                <div style={{
+                  padding: '20px 24px',
+                  fontFamily: "'Share Tech Mono', monospace",
                   fontSize: '0.85rem',
                   lineHeight: 1.7,
                   minHeight: '200px',
@@ -287,7 +361,7 @@ const Hero = () => {
                       initial={{ opacity: 0, x: -10 }}
                       animate={i < typedLines ? { opacity: 1, x: 0 } : {}}
                       transition={{ duration: 0.3 }}
-                      style={{ 
+                      style={{
                         paddingLeft: `${line.indent * 16}px`,
                         color: line.color,
                         whiteSpace: 'nowrap',
@@ -298,7 +372,7 @@ const Hero = () => {
                         <motion.span
                           animate={{ opacity: [1, 0] }}
                           transition={{ repeat: Infinity, duration: 0.8 }}
-                          style={{ 
+                          style={{
                             display: 'inline-block', width: '6px', height: '14px',
                             background: 'var(--accent-primary)', marginLeft: '2px',
                             verticalAlign: 'text-bottom'

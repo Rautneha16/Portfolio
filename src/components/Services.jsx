@@ -1,6 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Monitor, PenTool, Code2, Wrench, Search } from 'lucide-react';
+import TiltCard from './TiltCard';
+import { fadeInUpVariant, childFadeInUp } from '../utils/animations';
 
 const skills = [
   { name: 'HTML & CSS', level: 90 },
@@ -13,28 +15,26 @@ const skills = [
 ];
 
 const services = [
-  { icon: <PenTool size={28} />, title: 'Design' },
-  { icon: <Code2 size={28} />, title: 'Development' },
-  { icon: <Search size={28} />, title: 'R & D' },
-  { icon: <Monitor size={28} />, title: 'Quality' },
-  { icon: <Wrench size={28} />, title: 'Maintain' },
+  { icon: PenTool, title: 'Design', description: 'Crafting visually stunning and intuitive user interfaces focused on user experience.' },
+  { icon: Code2, title: 'Development', description: 'Building scalable, robust, and high-performance web applications using modern tech stacks.' },
+  { icon: Monitor, title: 'Quality', description: 'Ensuring high-end reliability through comprehensive testing and optimization protocols.' },
+  { icon: Wrench, title: 'Maintain', description: 'Providing ongoing support and updates to keep your digital products secure and efficient.' },
 ];
 
 const Services = () => {
   return (
-    <section id="services" className="section" style={{ background: 'var(--bg-secondary)' }}>
+    <section id="services" className="section">
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        variants={fadeInUpVariant}
+        initial="hidden"
+        whileInView="visible"
         viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
       >
         <div className="grid grid-2" style={{ gap: '4rem', alignItems: 'flex-start' }}>
-          
+
           {/* Left Column — Skills */}
           <div>
             <span style={{
-              fontFamily: "'Poppins', sans-serif",
               fontWeight: 800,
               fontSize: '0.85rem',
               color: 'var(--accent-primary)',
@@ -47,7 +47,6 @@ const Services = () => {
             </span>
 
             <h2 style={{
-              fontFamily: "'Poppins', sans-serif",
               fontWeight: 900,
               fontSize: 'clamp(1.8rem, 3vw, 2.5rem)',
               color: 'var(--text-primary)',
@@ -57,9 +56,8 @@ const Services = () => {
               I offer a Full-cycle of Web Development Services
             </h2>
 
-            <p className="text-muted" style={{ 
-              fontSize: '1.05rem', lineHeight: 1.8, marginBottom: '2rem',
-              fontFamily: "'Inter', sans-serif" 
+            <p className="text-muted" style={{
+              fontSize: '1.05rem', lineHeight: 1.8, marginBottom: '2rem'
             }}>
               From ideation to deployment and maintenance, I deliver end-to-end web solutions that are scalable, performant, and visually stunning.
             </p>
@@ -67,10 +65,14 @@ const Services = () => {
             {/* Progress Bar Skills */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
               {skills.map((skill, i) => (
-                <div key={skill.name}>
-                  <div style={{ 
+                <motion.div
+                  key={skill.name}
+                  whileHover={{ scale: 1.02, x: 10 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                >
+                  <div style={{
                     display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem',
-                    fontFamily: "'Poppins', sans-serif", fontWeight: 700, fontSize: '0.9rem',
+                    fontWeight: 700, fontSize: '0.9rem',
                     color: 'var(--text-primary)'
                   }}>
                     <span>{skill.name}</span>
@@ -91,50 +93,71 @@ const Services = () => {
                       }}
                     />
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
 
           {/* Right Column — Service Cards */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
+          <div className="grid grid-2" style={{
             gap: '1.25rem',
             paddingTop: '3rem',
           }}>
             {services.map((service, i) => (
               <motion.div
                 key={service.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                variants={childFadeInUp}
+                initial="hidden"
+                whileInView="visible"
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: 0.2 + i * 0.1 }}
-                className="chunky-card clickable"
-                style={{
-                  textAlign: 'center',
-                  padding: '2rem 1.5rem',
-                  marginTop: i % 2 !== 0 ? '2rem' : '0',
+                whileHover={{
+                  scale: 1.08,
+                  y: -10,
+                  rotate: i % 2 === 0 ? 2 : -2,
                 }}
+                whileTap={{ scale: 0.95 }}
+                style={{ perspective: '1000px', display: 'flex' }}
               >
-                <div style={{
-                  width: '56px', height: '56px', borderRadius: '12px',
-                  border: '2px solid var(--border-color)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  margin: '0 auto 1.25rem',
-                  color: 'var(--accent-primary)',
-                  background: 'var(--bg-primary)',
-                  boxShadow: 'var(--box-shadow-chunky)'
-                }}>
-                  {service.icon}
-                </div>
-                <h4 style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontWeight: 800, fontSize: '1rem',
-                  color: 'var(--text-primary)',
-                }}>
-                  {service.title}
-                </h4>
+                <TiltCard
+                  className="glass-card"
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    height: '100%',
+                    width: '100%',
+                    position: 'relative',
+                    overflow: 'hidden'
+                  }}
+                >
+                  <div style={{ position: 'absolute', top: '-20px', right: '-20px', opacity: 0.05, transform: 'rotate(-15deg)', pointerEvents: 'none' }}>
+                    <service.icon size={120} />
+                  </div>
+
+                  <div style={{
+                    background: 'var(--bg-primary)',
+                    padding: '1rem',
+                    borderRadius: '12px',
+                    marginBottom: '1.5rem',
+                    display: 'inline-flex',
+                    border: '1px solid var(--border-color)',
+                    boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.1)'
+                  }}>
+                    <service.icon size={28} color="var(--accent-primary)" />
+                  </div>
+
+                  <h3 style={{
+                    fontWeight: 800,
+                    fontSize: '1.4rem',
+                    marginBottom: '1rem',
+                    color: 'var(--text-primary)'
+                  }}>{service.title}</h3>
+
+                  <p className="text-muted" style={{
+                    lineHeight: 1.7,
+                    fontSize: '0.95rem'
+                  }}>{service.description}</p>
+                </TiltCard>
               </motion.div>
             ))}
           </div>

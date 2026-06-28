@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Briefcase } from 'lucide-react';
+import { fadeInUpVariant, childFadeInUp } from '../utils/animations';
 
 const Experience = () => {
   const experiences = [
@@ -23,10 +24,10 @@ const Experience = () => {
   return (
     <section id="experience" className="section">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        variants={fadeInUpVariant}
+        initial="hidden"
+        whileInView="visible"
         viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
       >
         <h2 className="heading-lg">Work <span className="text-gradient">Experience</span></h2>
         
@@ -45,11 +46,12 @@ const Experience = () => {
           {experiences.map((exp, index) => (
             <motion.div 
               key={exp.id}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              variants={childFadeInUp}
+              initial="hidden"
+              whileInView="visible"
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.2 }}
-              style={{ position: 'relative', paddingLeft: '4rem', marginBottom: '3rem', zIndex: 1 }}
+              whileHover={{ x: 15, scale: 1.02 }}
+              style={{ position: 'relative', paddingLeft: '4rem', marginBottom: '3rem', zIndex: 1, cursor: 'default' }}
             >
               <div style={{
                 position: 'absolute',
@@ -68,7 +70,7 @@ const Experience = () => {
                 <Briefcase size={16} color="var(--accent-primary)" />
               </div>
               
-              <div className="chunky-card clickable" style={{ padding: '2rem' }}>
+              <div className="glass-card" style={{ padding: '2rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', marginBottom: '1rem', gap: '1rem' }}>
                   <div>
                     <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)' }}>{exp.role}</h3>
@@ -82,13 +84,12 @@ const Experience = () => {
                     fontSize: '0.85rem',
                     fontWeight: 700,
                     color: 'var(--accent-primary)',
-                    height: 'fit-content',
-                    fontFamily: "'Poppins', sans-serif"
+                    height: 'fit-content'
                   }}>
                     {exp.duration}
                   </span>
                 </div>
-                <p className="text-muted" style={{ lineHeight: 1.7, fontFamily: "'Inter', sans-serif", fontSize: '0.95rem' }}>{exp.description}</p>
+                <p className="text-muted" style={{ lineHeight: 1.7, fontSize: '0.95rem' }}>{exp.description}</p>
               </div>
             </motion.div>
           ))}

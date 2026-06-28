@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Quote } from 'lucide-react';
+import TiltCard from './TiltCard';
 
 const Testimonials = () => {
   const testimonials = [
@@ -38,41 +39,69 @@ const Testimonials = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.2 }}
-              className="chunky-card clickable"
-              style={{ position: 'relative', padding: '3.5rem 2rem 2.25rem' }}
+              whileHover={{ 
+                scale: 1.05, 
+                rotate: index % 2 === 0 ? 2 : -2, 
+                y: -10,
+                boxShadow: '0 0 25px rgba(0, 255, 255, 0.3)'
+              }}
+              whileTap={{ scale: 0.98 }}
+              style={{ perspective: '1000px', cursor: 'pointer' }}
             >
-              <div style={{
-                position: 'absolute',
-                top: '-20px',
-                left: '2rem',
-                background: 'var(--accent-gradient)',
-                width: '40px',
-                height: '40px',
-                borderRadius: '8px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                border: '2px solid var(--border-color)',
-                boxShadow: 'var(--box-shadow-chunky)'
-              }}>
-                <Quote size={18} color="white" fill="white" />
-              </div>
-              
-              <p className="text-muted" style={{ fontSize: '1.05rem', fontStyle: 'italic', marginBottom: '2rem', lineHeight: 1.8, fontFamily: "'Inter', sans-serif" }}>
-                "{testimonial.content}"
-              </p>
-              
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <img 
-                  src={testimonial.image} 
-                  alt={testimonial.name} 
-                  style={{ width: '50px', height: '50px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--border-color)' }}
-                />
-                <div>
-                  <h4 style={{ fontWeight: 800, color: 'var(--text-primary)' }}>{testimonial.name}</h4>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', fontFamily: "'Poppins', sans-serif", fontWeight: 600 }}>{testimonial.role}</p>
+              <TiltCard
+                className="glass-card"
+                style={{ position: 'relative', padding: '2.5rem', height: '100%', display: 'flex', flexDirection: 'column' }}
+              >
+                <div style={{
+                  background: 'var(--accent-gradient)',
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 4px 15px rgba(255, 42, 122, 0.4)',
+                  marginBottom: '1.5rem'
+                }}>
+                  <Quote size={20} color="white" />
                 </div>
-              </div>
+                
+                <p style={{
+                  fontSize: '1.05rem',
+                  lineHeight: 1.8,
+                  marginBottom: '2rem',
+                  color: 'var(--text-primary)',
+                  fontStyle: 'italic',
+                  fontFamily: "'Inter', sans-serif",
+                  fontWeight: 500
+                }}>"{testimonial.content}"</p>
+                
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: 'auto' }}>
+                  <img 
+                    src={testimonial.image} 
+                    alt={testimonial.name}
+                    style={{
+                      width: '55px',
+                      height: '55px',
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                      border: '2px solid var(--accent-primary)',
+                      padding: '2px',
+                      background: 'var(--bg-primary)'
+                    }}
+                  />
+                  <div>
+                    <h4 style={{
+                      fontFamily: "'Cyberpunk', sans-serif",
+                      fontWeight: 800,
+                      color: 'var(--text-primary)',
+                      fontSize: '1.1rem',
+                      marginBottom: '0.2rem'
+                    }}>{testimonial.name}</h4>
+                    <p className="text-muted" style={{ fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{testimonial.role}</p>
+                  </div>
+                </div>
+              </TiltCard>
             </motion.div>
           ))}
         </div>

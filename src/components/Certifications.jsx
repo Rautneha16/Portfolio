@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Award, BookOpen } from 'lucide-react';
+import { fadeInUpVariant, childFadeInUp } from '../utils/animations';
 
 const Certifications = () => {
   const certifications = [
@@ -28,12 +29,12 @@ const Certifications = () => {
   ];
 
   return (
-    <section id="certifications" className="section" style={{ background: 'var(--bg-secondary)' }}>
+    <section id="certifications" className="section">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        variants={fadeInUpVariant}
+        initial="hidden"
+        whileInView="visible"
         viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
       >
         <h2 className="heading-lg">Education & <span className="text-gradient">Certifications</span></h2>
         
@@ -41,11 +42,11 @@ const Certifications = () => {
           {certifications.map((cert, index) => (
             <motion.div 
               key={cert.id}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              variants={childFadeInUp}
+              initial="hidden"
+              whileInView="visible"
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
-              className="chunky-card clickable"
+              className="glass-card"
               style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', padding: '1.75rem' }}
             >
               <div style={{ 
@@ -62,8 +63,8 @@ const Certifications = () => {
               </div>
               <div>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '0.25rem' }}>{cert.title}</h3>
-                <p className="text-muted" style={{ fontSize: '0.9rem', marginBottom: '0.25rem', fontFamily: "'Inter', sans-serif" }}>{cert.issuer}</p>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', fontWeight: 700, fontFamily: "'Poppins', sans-serif" }}>{cert.date}</p>
+                <p className="text-muted" style={{ fontSize: '0.9rem', marginBottom: '0.25rem' }}>{cert.issuer}</p>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', fontWeight: 700 }}>{cert.date}</p>
               </div>
             </motion.div>
           ))}

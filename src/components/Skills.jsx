@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { fadeInUpVariant, childFadeInUp, hoverScale } from '../utils/animations';
 
 const Skills = () => {
   const skillCategories = [
@@ -35,10 +36,10 @@ const Skills = () => {
   return (
     <section id="skills" className="section">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        variants={fadeInUpVariant}
+        initial="hidden"
+        whileInView="visible"
         viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
       >
         <h2 className="heading-lg">Technical <span className="text-gradient">Skills</span></h2>
 
@@ -46,16 +47,22 @@ const Skills = () => {
           {skillCategories.map((category, catIndex) => (
             <motion.div
               key={category.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              variants={childFadeInUp}
+              initial="hidden"
+              whileInView="visible"
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: catIndex * 0.1 }}
-              className="chunky-card"
+              whileHover={{ scale: 1.05, y: -5, boxShadow: 'var(--box-shadow-chunky), 0 0 20px rgba(255,42,122,0.3)' }}
+              className="glass-card"
+              style={{ cursor: 'pointer' }}
             >
               <h3 className="heading-md" style={{ color: 'var(--accent-secondary)', fontWeight: 800 }}>{category.title}</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginTop: '2rem' }}>
-                {category.skills.map(skill => (
-                  <div key={skill.name}>
+                {category.skills.map((skill, index) => (
+                  <motion.div 
+                    key={skill.name}
+                    whileHover={{ scale: 1.03, x: 5 }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                  >
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                       <span style={{ fontWeight: 700, fontSize: '0.95rem' }}>{skill.name}</span>
                       <span className="text-muted" style={{ fontWeight: 600 }}>{skill.level}%</span>
@@ -78,7 +85,7 @@ const Skills = () => {
                         }}
                       />
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </motion.div>

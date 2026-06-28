@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { fadeInUpVariant, childFadeInUp } from '../utils/animations';
 
 const contactInfo = [
   {
     icon: <MapPin size={28} />,
     title: 'Location',
     detail: 'Pune, Maharashtra, India',
-    link: null,
+    link: 'https://maps.google.com/?q=Pune,+Maharashtra,+India',
   },
   {
     icon: <Phone size={28} />,
@@ -19,7 +20,7 @@ const contactInfo = [
     icon: <Mail size={28} />,
     title: 'Mail',
     detail: 'gracy.codeanddeploy@gmail.com',
-    link: 'https://mail.google.com/mail/?view=cm&fs=1&to=gracy.codeanddeploy@gmail.com',
+    link: 'mailto:gracy.codeanddeploy@gmail.com',
   },
 ];
 
@@ -31,23 +32,27 @@ const Contact = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const subject = `Portfolio Message from ${name || 'Visitor'}`;
-    const body = `Name: ${name || 'N/A'}%0D%0AEmail: ${email || 'N/A'}%0D%0A%0D%0A${message || ''}`;
-    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=gracy.codeanddeploy@gmail.com&su=${encodeURIComponent(subject)}&body=${body}`;
+    const body = `Name: ${name || 'N/A'}\nEmail: ${email || 'N/A'}\n\n${message || ''}`;
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=gracy.codeanddeploy@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.open(gmailUrl, '_blank');
+    
+    // Clear the form fields after redirecting
+    setName('');
+    setEmail('');
+    setMessage('');
   };
 
   return (
     <section id="contact" className="section">
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        variants={fadeInUpVariant}
+        initial="hidden"
+        whileInView="visible"
         viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
       >
         {/* Section Label */}
         <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
           <span style={{
-            fontFamily: "'Poppins', sans-serif",
             fontWeight: 800,
             fontSize: '0.85rem',
             color: 'var(--accent-primary)',
@@ -59,7 +64,6 @@ const Contact = () => {
             CONTACT
           </span>
           <h2 style={{
-            fontFamily: "'Poppins', sans-serif",
             fontWeight: 900,
             fontSize: 'clamp(1.6rem, 2.5vw, 2.2rem)',
             color: 'var(--text-primary)',
@@ -76,12 +80,19 @@ const Contact = () => {
           {contactInfo.map((item, i) => (
             <motion.div
               key={item.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              variants={childFadeInUp}
+              initial="hidden"
+              whileInView="visible"
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.1 + i * 0.1 }}
-              className="chunky-card clickable"
-              style={{ textAlign: 'center', padding: '2.5rem 1.5rem' }}
+              whileHover={{ scale: 1.05, y: -10, boxShadow: 'var(--box-shadow-chunky), 0 0 20px rgba(0,255,255,0.3)' }}
+              whileTap={{ scale: 0.95 }}
+              className="glass-card"
+              style={{ textAlign: 'center', padding: '2.5rem 1.5rem', cursor: 'pointer', position: 'relative' }}
+              onClick={() => {
+                if (item.link) {
+                  window.open(item.link, item.link.startsWith('http') ? '_blank' : '_self');
+                }
+              }}
             >
               <div style={{
                 width: '60px', height: '60px', borderRadius: '12px',
@@ -95,27 +106,14 @@ const Contact = () => {
                 {item.icon}
               </div>
               <h4 style={{
-                fontFamily: "'Poppins', sans-serif",
                 fontWeight: 800, fontSize: '1rem',
                 color: 'var(--text-primary)',
                 marginBottom: '0.5rem',
               }}>
                 {item.title}
               </h4>
-              <p className="text-muted" style={{ fontSize: '0.95rem', fontFamily: "'Inter', sans-serif" }}>
-                {item.link ? (
-                  <a
-                    href={item.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="clickable"
-                    style={{ color: 'inherit', textDecoration: 'none', fontWeight: 600 }}
-                  >
-                    {item.detail}
-                  </a>
-                ) : (
-                  item.detail
-                )}
+              <p className="text-muted" style={{ fontSize: '0.95rem', fontWeight: 600 }}>
+                {item.detail}
               </p>
             </motion.div>
           ))}
@@ -123,15 +121,14 @@ const Contact = () => {
 
         {/* Contact Form */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={fadeInUpVariant}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="chunky-card"
+          className="glass-card"
           style={{ maxWidth: '700px', margin: '0 auto', padding: '3rem' }}
         >
           <h3 style={{
-            fontFamily: "'Poppins', sans-serif",
             fontWeight: 800, fontSize: '1.4rem',
             color: 'var(--text-primary)',
             marginBottom: '2rem',
@@ -140,9 +137,9 @@ const Contact = () => {
             Send me a message
           </h3>
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+            <div className="grid grid-2" style={{ gap: '1.25rem' }}>
               <div>
-                <label htmlFor="name" style={{ display: 'block', marginBottom: '0.4rem', color: 'var(--text-primary)', fontWeight: 800, fontSize: '0.85rem', fontFamily: "'Poppins', sans-serif" }}>Name</label>
+                <label htmlFor="name" style={{ display: 'block', marginBottom: '0.4rem', color: 'var(--text-primary)', fontWeight: 800, fontSize: '0.85rem' }}>Name</label>
                 <input
                   type="text"
                   id="name"
@@ -155,7 +152,7 @@ const Contact = () => {
                     border: '2px solid var(--border-color)',
                     borderRadius: '8px',
                     color: 'var(--text-primary)',
-                    fontFamily: "'Inter', sans-serif", fontSize: '0.95rem',
+                    fontSize: '0.95rem',
                     outline: 'none', transition: 'border-color 0.3s',
                   }}
                   onFocus={(e) => e.target.style.borderColor = 'var(--accent-primary)'}
@@ -163,7 +160,7 @@ const Contact = () => {
                 />
               </div>
               <div>
-                <label htmlFor="email" style={{ display: 'block', marginBottom: '0.4rem', color: 'var(--text-primary)', fontWeight: 800, fontSize: '0.85rem', fontFamily: "'Poppins', sans-serif" }}>Email</label>
+                <label htmlFor="email" style={{ display: 'block', marginBottom: '0.4rem', color: 'var(--text-primary)', fontWeight: 800, fontSize: '0.85rem' }}>Email</label>
                 <input
                   type="email"
                   id="email"
@@ -176,7 +173,7 @@ const Contact = () => {
                     border: '2px solid var(--border-color)',
                     borderRadius: '8px',
                     color: 'var(--text-primary)',
-                    fontFamily: "'Inter', sans-serif", fontSize: '0.95rem',
+                    fontSize: '0.95rem',
                     outline: 'none', transition: 'border-color 0.3s',
                   }}
                   onFocus={(e) => e.target.style.borderColor = 'var(--accent-primary)'}
@@ -185,7 +182,7 @@ const Contact = () => {
               </div>
             </div>
             <div>
-              <label htmlFor="message" style={{ display: 'block', marginBottom: '0.4rem', color: 'var(--text-primary)', fontWeight: 800, fontSize: '0.85rem', fontFamily: "'Poppins', sans-serif" }}>Message</label>
+              <label htmlFor="message" style={{ display: 'block', marginBottom: '0.4rem', color: 'var(--text-primary)', fontWeight: 800, fontSize: '0.85rem' }}>Message</label>
               <textarea
                 id="message"
                 rows="5"
@@ -198,7 +195,7 @@ const Contact = () => {
                   border: '2px solid var(--border-color)',
                   borderRadius: '8px',
                   color: 'var(--text-primary)',
-                  fontFamily: "'Inter', sans-serif", fontSize: '0.95rem',
+                  fontSize: '0.95rem',
                   outline: 'none', resize: 'vertical',
                   transition: 'border-color 0.3s',
                 }}
@@ -206,13 +203,15 @@ const Contact = () => {
                 onBlur={(e) => e.target.style.borderColor = 'var(--border-color)'}
               />
             </div>
-            <button
+            <motion.button
               type="submit"
-              className="btn btn-primary clickable"
-              style={{ width: '100%', marginTop: '0.5rem', padding: '1rem' }}
+              whileHover={{ scale: 1.05, boxShadow: '0 0 15px var(--accent-primary)' }}
+              whileTap={{ scale: 0.95 }}
+              className="btn btn-primary"
+              style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginTop: '1rem' }}
             >
               Send Message <Send size={18} />
-            </button>
+            </motion.button>
           </form>
         </motion.div>
       </motion.div>
