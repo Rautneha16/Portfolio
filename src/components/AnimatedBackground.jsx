@@ -25,6 +25,7 @@ const AnimatedBackground = () => {
   return (
     <div
       aria-hidden="true"
+      className="hide-on-mobile"
       style={{
         position: 'absolute',
         inset: 0,

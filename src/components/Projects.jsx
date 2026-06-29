@@ -123,7 +123,8 @@ const Projects = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 transition={{ duration: 0.4 }}
-                style={{ height: '100%' }}
+                whileTap={{ scale: 0.98 }}
+                style={{ height: '100%', cursor: 'pointer' }}
               >
                 <TiltCard
                   style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '100%' }}

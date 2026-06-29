@@ -24,35 +24,37 @@ const Experience = () => {
   return (
     <section id="experience" className="section">
       <motion.div
-        variants={fadeInUpVariant}
-        initial="hidden"
-        whileInView="visible"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
         viewport={{ once: true }}
       >
         <h2 className="heading-lg">Work <span className="text-gradient">Experience</span></h2>
-        
-        <div style={{ maxWidth: '800px', margin: '0 auto', position: 'relative' }}>
-          {/* Vertical Timeline Line */}
-          <div style={{
-            position: 'absolute',
-            left: '24px',
-            top: 0,
-            bottom: 0,
-            width: '2px',
-            background: 'var(--border-color)',
-            zIndex: 0
-          }} />
+      </motion.div>
 
-          {experiences.map((exp, index) => (
-            <motion.div 
-              key={exp.id}
-              variants={childFadeInUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              whileHover={{ x: 15, scale: 1.02 }}
-              style={{ position: 'relative', paddingLeft: '4rem', marginBottom: '3rem', zIndex: 1, cursor: 'default' }}
-            >
+      <div style={{ maxWidth: '800px', margin: '0 auto', position: 'relative' }}>
+        {/* Vertical Timeline Line */}
+        <div style={{
+          position: 'absolute',
+          left: '24px',
+          top: 0,
+          bottom: 0,
+          width: '2px',
+          background: 'var(--border-color)',
+          zIndex: 0
+        }} />
+
+        {experiences.map((exp, index) => (
+          <motion.div 
+            key={exp.id}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            viewport={{ once: true, margin: "-50px" }}
+            whileHover={{ x: 15, scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            style={{ position: 'relative', paddingLeft: '4rem', marginBottom: '3rem', zIndex: 1, cursor: 'pointer' }}
+          >
               <div style={{
                 position: 'absolute',
                 left: '8px',
@@ -94,7 +96,6 @@ const Experience = () => {
             </motion.div>
           ))}
         </div>
-      </motion.div>
     </section>
   );
 };

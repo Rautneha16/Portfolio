@@ -5,6 +5,7 @@ import logoImage from './images/logo.png';
 
 const Navbar = ({ installPromptEvent, setInstallPromptEvent }) => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isPastHero, setIsPastHero] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
 
@@ -29,6 +30,7 @@ const Navbar = ({ installPromptEvent, setInstallPromptEvent }) => {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
+      setIsPastHero(window.scrollY > (window.innerHeight * 0.75));
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -80,7 +82,19 @@ const Navbar = ({ installPromptEvent, setInstallPromptEvent }) => {
             style={{ borderRadius: '50%', objectFit: 'cover' }} 
             onError={(e) => { e.target.style.display = 'none'; }}
           />
-          <span className="text-gradient">Neha</span>&nbsp;Raut
+          <AnimatePresence>
+            {!isPastHero && (
+              <motion.div
+                initial={{ opacity: 0, width: 0, scale: 0.8, filter: 'blur(4px)' }}
+                animate={{ opacity: 1, width: 'auto', scale: 1, filter: 'blur(0px)' }}
+                exit={{ opacity: 0, width: 0, scale: 0.8, filter: 'blur(4px)' }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+                style={{ overflow: 'hidden', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center' }}
+              >
+                <span className="text-gradient">Neha</span>&nbsp;Raut
+              </motion.div>
+            )}
+          </AnimatePresence>
         </a>
 
         {/* Desktop Menu */}
@@ -154,7 +168,7 @@ const Navbar = ({ installPromptEvent, setInstallPromptEvent }) => {
 
       {/* Responsive Styles */}
       <style>{`
-        /* Desktop Default (Laptop & up) */
+        /* Desktop Default (Laptop and up) */
         .navbar-logo-img { width: 52px; height: 52px; }
         .navbar-logo-text { font-size: 1.4rem; }
 

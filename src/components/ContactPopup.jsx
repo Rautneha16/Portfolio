@@ -219,6 +219,35 @@ const ContactPopup = ({ onClose }) => {
                     textTransform: 'uppercase', letterSpacing: '0.06em',
                   }}
                 >Message</label>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                  {[
+                    { label: "Fresh website", text: "I want to make a fresh website" },
+                    { label: "Redesign website", text: "I want to redesign my existing website" },
+                    { label: "E-commerce store", text: "I want to build an e-commerce store" },
+                    { label: "Maintenance", text: "I need help maintaining my current website" },
+                    { label: "Type manually", text: "" }
+                  ].map((sug) => (
+                    <button
+                      key={sug.label}
+                      type="button"
+                      onClick={() => setMessage(sug.text)}
+                      style={{
+                        background: (message === sug.text && sug.text !== '') ? 'var(--accent-primary)' : 'var(--bg-tertiary)',
+                        color: (message === sug.text && sug.text !== '') ? '#fff' : 'var(--text-secondary)',
+                        border: '1px solid var(--border-color)',
+                        borderRadius: '20px',
+                        padding: '0.35rem 0.75rem',
+                        fontSize: '0.75rem',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                        fontWeight: 600,
+                        fontFamily: "'Inter', sans-serif"
+                      }}
+                    >
+                      {sug.label}
+                    </button>
+                  ))}
+                </div>
                 <textarea
                   id="popup-message"
                   rows="3"

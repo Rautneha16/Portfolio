@@ -25,9 +25,9 @@ const Services = () => {
   return (
     <section id="services" className="section">
       <motion.div
-        variants={fadeInUpVariant}
-        initial="hidden"
-        whileInView="visible"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
         viewport={{ once: true }}
       >
         <div className="grid grid-2" style={{ gap: '4rem', alignItems: 'flex-start' }}>
@@ -106,10 +106,10 @@ const Services = () => {
             {services.map((service, i) => (
               <motion.div
                 key={service.title}
-                variants={childFadeInUp}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                viewport={{ once: true, margin: "-50px" }}
                 whileHover={{
                   scale: 1.08,
                   y: -10,

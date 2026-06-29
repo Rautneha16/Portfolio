@@ -31,9 +31,9 @@ const Certifications = () => {
   return (
     <section id="certifications" className="section">
       <motion.div
-        variants={fadeInUpVariant}
-        initial="hidden"
-        whileInView="visible"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
         viewport={{ once: true }}
       >
         <h2 className="heading-lg">Education & <span className="text-gradient">Certifications</span></h2>
@@ -42,10 +42,11 @@ const Certifications = () => {
           {certifications.map((cert, index) => (
             <motion.div 
               key={cert.id}
-              variants={childFadeInUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              viewport={{ once: true, margin: "-50px" }}
+              whileTap={{ scale: 0.98 }}
               className="glass-card"
               style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', padding: '1.75rem' }}
             >

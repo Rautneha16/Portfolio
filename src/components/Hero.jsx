@@ -64,6 +64,7 @@ const Hero = () => {
         playsInline
         aria-hidden="true"
         tabIndex={-1}
+        className="hide-on-mobile"
         style={{
           position: 'absolute',
           inset: 0,
@@ -204,7 +205,7 @@ const Hero = () => {
                       scale: 1.15,
                       rotate: [0, -10, 10, -5, 5, 0],
                     }}
-                    whileTap={{ scale: 0.9 }}
+                    whileTap={{ scale: 0.85, rotate: [0, -15, 15, 0] }}
                     transition={{ 
                       default: { duration: 0.4 },
                       opacity: { delay: 0.8 + i * 0.1 },
@@ -320,8 +321,8 @@ const Hero = () => {
                 />
               </motion.div>
 
-              {/* Code Editor Card - shifted slightly down-left */}
-              <div style={{
+              {/* Code Editor Card */}
+              <div className="hero-code-card" style={{
                 background: '#120f26',
                 border: '2px solid var(--border-color)',
                 borderRadius: '16px',
@@ -329,8 +330,6 @@ const Hero = () => {
                 boxShadow: 'var(--box-shadow-chunky)',
                 position: 'relative',
                 top: '120px',
-                left: '-10px',
-                width: '90%',
                 zIndex: 5,
               }}>
                 {/* Title Bar */}
