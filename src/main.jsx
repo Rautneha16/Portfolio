@@ -1,10 +1,2 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
-
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
+// This file is no longer used. The project has been migrated to Next.js. 
+// The main entry point is now src/app/layout.jsx and src/app/page.jsx.

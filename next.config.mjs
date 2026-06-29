@@ -1,11 +1,3 @@
-import fs from 'fs';
-import path from 'path';
-
-const logoPath = path.resolve('src/components/images/logo');
-if (fs.existsSync(logoPath)) {
-  fs.renameSync(logoPath, logoPath + '.png');
-}
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,

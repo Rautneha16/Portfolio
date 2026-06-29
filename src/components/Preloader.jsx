@@ -70,25 +70,7 @@ const Preloader = () => {
             />
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            style={{
-              marginTop: '2rem',
-              fontFamily: "'Share Tech Mono', monospace",
-              color: 'var(--text-primary)',
-              fontSize: '1.2rem',
-              letterSpacing: '0.2em',
-              textTransform: 'uppercase',
-            }}
-          >
-            System <span style={{ color: 'var(--accent-primary)' }}>Loading</span>
-            <motion.span
-              animate={{ opacity: [0, 1, 0] }}
-              transition={{ repeat: Infinity, duration: 1.5 }}
-            >...</motion.span>
-          </motion.div>
+
         </motion.div>
       )}
     </AnimatePresence>

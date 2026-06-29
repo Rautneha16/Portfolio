@@ -9,7 +9,6 @@ const PWARegistration = ({ onInstallPromptReady }) => {
         navigator.serviceWorker
           .register('/sw.js')
           .then((registration) => {
-            console.log('SW registered:', registration.scope);
 
             // Listen for updates
             registration.addEventListener('updatefound', () => {
@@ -22,7 +21,9 @@ const PWARegistration = ({ onInstallPromptReady }) => {
               });
             });
           })
-          .catch((err) => console.log('SW registration failed:', err));
+          .catch((err) => {
+            // Silently fail if SW unsupported/blocked
+          });
       });
     }
 

@@ -92,7 +92,9 @@ const Projects = () => {
           {categories.map((cat) => (
             <button
               key={cat}
+              type="button"
               onClick={() => setFilter(cat)}
+              aria-pressed={filter === cat}
               className="btn"
               style={{
                 background: filter === cat ? 'var(--accent-primary)' : 'var(--glass-bg)',
@@ -130,6 +132,10 @@ const Projects = () => {
                     <img
                       src={project.image.src || project.image}
                       alt={project.title}
+                      loading="lazy"
+                      decoding="async"
+                      width={800}
+                      height={220}
                       style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
                       onMouseOver={(e) => e.target.style.transform = 'scale(1.08)'}
                       onMouseOut={(e) => e.target.style.transform = 'scale(1)'}

@@ -179,6 +179,15 @@ ul {
 @media (max-width: 768px) {
   .section {
     padding: 2rem 0.5rem;
+    /* Skip rendering off-screen sections until near viewport */
+    content-visibility: auto;
+    contain-intrinsic-size: 0 600px;
+  }
+
+  /* Reduce backdrop-filter blur on mobile — full blur is very expensive on mobile GPUs */
+  .glass-card {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 }
 
@@ -267,6 +276,9 @@ ul {
   -webkit-backdrop-filter: blur(24px);
   position: relative;
   overflow: hidden;
+  /* Promote to compositor layer so blur doesn't repaint on scroll */
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .glass-card::before {

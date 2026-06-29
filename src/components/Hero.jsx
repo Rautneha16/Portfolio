@@ -27,11 +27,9 @@ const Hero = () => {
   const [typedLines, setTypedLines] = useState(0);
   const sectionRef = useRef(null);
 
-  // Parallax setup
+  // Single parallax value — fewer scroll listeners = less main-thread work per frame
   const { scrollY } = useScroll();
-  const y1 = useTransform(scrollY, [0, 800], [0, 200]);
-  const y2 = useTransform(scrollY, [0, 800], [0, -150]);
-  const y3 = useTransform(scrollY, [0, 800], [0, 300]);
+  const yParallax = useTransform(scrollY, [0, 800], [0, 180]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -51,7 +49,8 @@ const Hero = () => {
       minHeight: '100vh',
       display: 'flex',
       alignItems: 'center',
-      paddingTop: '3rem',
+      paddingTop: '100px',
+      paddingBottom: '2rem',
       position: 'relative',
       overflow: 'hidden'
     }}>
@@ -63,6 +62,8 @@ const Hero = () => {
         muted
         defaultMuted
         playsInline
+        aria-hidden="true"
+        tabIndex={-1}
         style={{
           position: 'absolute',
           inset: 0,
@@ -86,7 +87,7 @@ const Hero = () => {
       }} />
 
       {/* Neon scanline effect */}
-      <div style={{
+      <div aria-hidden="true" style={{
         position: 'absolute',
         inset: 0,
         backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,255,0.015) 2px, rgba(0,255,255,0.015) 4px)',
@@ -94,44 +95,48 @@ const Hero = () => {
         pointerEvents: 'none',
       }} />
 
-      {/* ===== Parallax Floating Elements ===== */}
+      {/* ===== Parallax Floating Elements =====
+          Perf rules: no textShadow on animated elements (forces software raster),
+          will-change: transform promotes to compositor layer */}
       <motion.div
-        animate={{ rotate: 360, y: [0, -20, 0] }}
-        transition={{ rotate: { duration: 20, repeat: Infinity, ease: 'linear' }, y: { duration: 4, repeat: Infinity, ease: 'easeInOut' } }}
-        style={{ position: 'absolute', top: '20%', left: '10%', y: y1, zIndex: 2, opacity: 0.4, color: '#00ffff', fontFamily: "'Share Tech Mono', monospace", fontSize: '2rem', textShadow: '0 0 10px #00ffff', pointerEvents: 'none', display: 'inline-block' }}
+        animate={{ rotate: 360 }}
+        transition={{ rotate: { duration: 20, repeat: Infinity, ease: 'linear' } }}
+        style={{ position: 'absolute', top: '20%', left: '10%', y: yParallax, zIndex: 2, opacity: 0.35, color: '#00ffff', fontFamily: "'Share Tech Mono', monospace", fontSize: '2rem', pointerEvents: 'none', display: 'inline-block', willChange: 'transform' }}
       >
         {`</>`}
       </motion.div>
       <motion.div
-        animate={{ rotate: -360, y: [0, 20, 0] }}
-        transition={{ rotate: { duration: 25, repeat: Infinity, ease: 'linear' }, y: { duration: 5, repeat: Infinity, ease: 'easeInOut' } }}
-        style={{ position: 'absolute', top: '60%', left: '80%', y: y2, zIndex: 2, opacity: 0.3, color: '#ff2a7a', fontFamily: "'Share Tech Mono', monospace", fontSize: '3.5rem', textShadow: '0 0 10px #ff2a7a', pointerEvents: 'none', display: 'inline-block' }}
+        animate={{ rotate: -360 }}
+        transition={{ rotate: { duration: 25, repeat: Infinity, ease: 'linear' } }}
+        style={{ position: 'absolute', top: '60%', left: '80%', zIndex: 2, opacity: 0.25, color: '#ff2a7a', fontFamily: "'Share Tech Mono', monospace", fontSize: '3.5rem', pointerEvents: 'none', display: 'inline-block', willChange: 'transform' }}
       >
         {`{ }`}
       </motion.div>
       <motion.div
-        animate={{ rotate: 180, scale: [1, 1.2, 1] }}
-        transition={{ rotate: { duration: 15, repeat: Infinity, ease: 'linear' }, scale: { duration: 3, repeat: Infinity, ease: 'easeInOut' } }}
-        style={{ position: 'absolute', top: '75%', left: '20%', y: y3, zIndex: 2, opacity: 0.25, color: '#a855f7', fontFamily: "'Share Tech Mono', monospace", fontSize: '1.8rem', textShadow: '0 0 10px #a855f7', pointerEvents: 'none', display: 'inline-block' }}
+        animate={{ rotate: 180 }}
+        transition={{ rotate: { duration: 15, repeat: Infinity, ease: 'linear' } }}
+        style={{ position: 'absolute', top: '75%', left: '20%', zIndex: 2, opacity: 0.2, color: '#a855f7', fontFamily: "'Share Tech Mono', monospace", fontSize: '1.8rem', pointerEvents: 'none', display: 'inline-block', willChange: 'transform' }}
       >
         {`[ ]`}
       </motion.div>
-      <motion.div style={{ position: 'absolute', top: '15%', right: '15%', y: y1, zIndex: 2, opacity: 0.3, border: '2px solid #ff5e97', width: '50px', height: '50px', borderRadius: '50%', boxShadow: '0 0 15px #ff5e97', pointerEvents: 'none' }} />
-      <motion.div style={{ position: 'absolute', bottom: '10%', right: '35%', y: y2, zIndex: 2, opacity: 0.2, border: '2px dashed #00ffff', width: '80px', height: '80px', borderRadius: '10%', transform: 'rotate(45deg)', pointerEvents: 'none' }} />
+      {/* Static decorative shapes — no animation, zero scroll cost */}
+      <div style={{ position: 'absolute', top: '15%', right: '15%', zIndex: 2, opacity: 0.25, border: '2px solid #ff5e97', width: '50px', height: '50px', borderRadius: '50%', boxShadow: '0 0 10px #ff5e97', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', bottom: '10%', right: '35%', zIndex: 2, opacity: 0.15, border: '2px dashed #00ffff', width: '80px', height: '80px', borderRadius: '10%', transform: 'rotate(45deg)', pointerEvents: 'none' }} />
 
-      {/* Signature glowing background blobs */}
-      <div className="glow-blob animate-pulse-soft" style={{
+      {/* Static glow blobs — animate-pulse-soft on filtered elements is expensive; static is free */}
+      <div className="glow-blob" style={{
         top: '10%', left: '-8%',
         width: '350px', height: '350px',
         background: 'var(--accent-primary)',
         zIndex: 3,
+        opacity: 0.12,
       }} />
-      <div className="glow-blob animate-pulse-soft" style={{
+      <div className="glow-blob" style={{
         bottom: '5%', right: '-5%',
         width: '450px', height: '450px',
         background: 'var(--accent-secondary)',
-        animationDelay: '2s',
         zIndex: 3,
+        opacity: 0.09,
       }} />
 
       <div className="container" style={{ position: 'relative', zIndex: 4 }}>
@@ -205,6 +210,8 @@ const Hero = () => {
                       opacity: { delay: 0.8 + i * 0.1 },
                       scale: { delay: 0.8 + i * 0.1, type: 'spring', stiffness: 200 }
                     }}
+                    role="img"
+                    aria-label={tech.label}
                     title={tech.label}
                     style={{
                       display: 'flex', 

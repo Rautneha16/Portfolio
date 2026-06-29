@@ -58,24 +58,26 @@ const Navbar = ({ installPromptEvent, setInstallPromptEvent }) => {
       boxShadow: 'none',
     }}>
       <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <a href="#" className="heading-md" style={{
-          margin: 0,
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.5rem',
-          fontWeight: 900,
-          fontSize: '1.1rem',
-          letterSpacing: '0.08em',
-          color: isScrolled ? 'var(--text-primary)' : '#ffffff',
-          textShadow: isScrolled ? 'none' : '0 0 20px rgba(255,42,122,0.7)',
-          filter: isScrolled ? 'none' : 'drop-shadow(0 0 8px rgba(255,42,122,0.4))',
-          transition: 'color 0.3s ease, text-shadow 0.3s ease',
-          textDecoration: 'none'
-        }}>
+        <a href="#" className="heading-md navbar-logo-text"
+          style={{
+            margin: 0,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.6rem',
+            fontWeight: 900,
+            letterSpacing: '0.08em',
+            color: isScrolled ? 'var(--text-primary)' : '#ffffff',
+            textShadow: isScrolled ? 'none' : '0 0 20px rgba(255,42,122,0.7)',
+            filter: isScrolled ? 'none' : 'drop-shadow(0 0 8px rgba(255,42,122,0.4))',
+            transition: 'color 0.3s ease, text-shadow 0.3s ease',
+            textDecoration: 'none'
+          }}
+        >
           <img 
             src={logoImage.src ? logoImage.src : logoImage} 
-            alt="Logo" 
-            style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover' }} 
+            alt="Neha Raut logo" 
+            className="navbar-logo-img"
+            style={{ borderRadius: '50%', objectFit: 'cover' }} 
             onError={(e) => { e.target.style.display = 'none'; }}
           />
           <span className="text-gradient">Neha</span>&nbsp;Raut
@@ -87,6 +89,7 @@ const Navbar = ({ installPromptEvent, setInstallPromptEvent }) => {
             <li key={link.name}>
               <a 
                 href={link.href} 
+                aria-label={`Navigate to ${link.name} section`}
                 style={{ 
                   transition: 'color 0.2s ease, text-shadow 0.2s ease',
                   fontWeight: 500,
@@ -138,7 +141,9 @@ const Navbar = ({ installPromptEvent, setInstallPromptEvent }) => {
         <div style={{ display: 'none', alignItems: 'center', gap: '0.5rem' }} className="mobile-actions">
           <button 
             className="mobile-nav-toggle"
+            type="button"
             aria-label="Toggle mobile menu"
+            aria-expanded={isMobileMenuOpen}
             style={{ background: 'none', border: 'none', color: 'var(--text-primary)', cursor: 'pointer', padding: '8px' }}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
@@ -147,11 +152,19 @@ const Navbar = ({ installPromptEvent, setInstallPromptEvent }) => {
         </div>
       </div>
 
-      {/* Mobile Menu Styles */}
+      {/* Responsive Styles */}
       <style>{`
+        /* Desktop Default (Laptop & up) */
+        .navbar-logo-img { width: 52px; height: 52px; }
+        .navbar-logo-text { font-size: 1.4rem; }
+
         @media (max-width: 768px) {
           .desktop-nav { display: none !important; }
           .mobile-actions { display: flex !important; }
+          
+          /* Mobile sizes */
+          .navbar-logo-img { width: 42px; height: 42px; }
+          .navbar-logo-text { font-size: 1.15rem; }
         }
       `}</style>
 

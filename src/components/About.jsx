@@ -1,19 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Download, ThumbsUp } from 'lucide-react';
 import { fadeInUpVariant, hoverScale } from '../utils/animations';
 
 const TypewriterText = ({ text, delay = 0 }) => {
-  const [displayedText, setDisplayedText] = React.useState('');
-  const [started, setStarted] = React.useState(false);
+  const [displayedText, setDisplayedText] = useState('');
+  const [started, setStarted] = useState(false);
+  const [isDone, setIsDone] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!started) return;
     let i = 0;
     const interval = setInterval(() => {
       setDisplayedText(text.slice(0, i + 1));
       i++;
-      if (i >= text.length) clearInterval(interval);
+      if (i >= text.length) {
+        clearInterval(interval);
+        setIsDone(true);
+      }
     }, 15);
     return () => clearInterval(interval);
   }, [started, text]);
@@ -26,22 +30,26 @@ const TypewriterText = ({ text, delay = 0 }) => {
       viewport={{ once: true, margin: "-100px" }}
     >
       {displayedText}
-      <motion.span
-        animate={{ opacity: [1, 0] }}
-        transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
-        style={{
-          display: 'inline-block',
-          width: '8px',
-          height: '1em',
-          background: 'var(--accent-primary)',
-          marginLeft: '4px',
-          verticalAlign: 'middle',
-          boxShadow: '0 0 8px var(--accent-primary)'
-        }}
-      />
+      {/* Only show cursor while typing is in progress */}
+      {!isDone && (
+        <motion.span
+          animate={{ opacity: [1, 0] }}
+          transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
+          style={{
+            display: 'inline-block',
+            width: '8px',
+            height: '1em',
+            background: 'var(--accent-primary)',
+            marginLeft: '4px',
+            verticalAlign: 'middle',
+            boxShadow: '0 0 8px var(--accent-primary)'
+          }}
+        />
+      )}
     </motion.span>
   );
 };
+
 
 const About = () => {
   const highlights = [

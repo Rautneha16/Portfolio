@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, Suspense, lazy } from 'react';
-import { motion } from 'framer-motion';
+import { motion, MotionConfig } from 'framer-motion';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import About from '../components/About';
@@ -12,6 +12,7 @@ import Footer from '../components/Footer';
 import PWARegistration from '../components/PWARegistration';
 import Preloader from '../components/Preloader';
 import AnimatedBackground from '../components/AnimatedBackground';
+import SkeletonLoader from '../components/SkeletonLoader';
 
 const Experience = lazy(() => import('../components/Experience'));
 const Certifications = lazy(() => import('../components/Certifications'));
@@ -21,22 +22,24 @@ const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '917420008485
 
 function Page() {
   const [installPromptEvent, setInstallPromptEvent] = useState(null);
-  const [isOnline, setIsOnline] = useState(true); // default true for SSR
   const [showOfflineBanner, setShowOfflineBanner] = useState(false);
   const [showWhatsApp, setShowWhatsApp] = useState(false);
 
-  // Track scroll for WhatsApp button visibility
+  // Track scroll for WhatsApp button visibility + scroll-to-top on mount
   useEffect(() => {
-    setIsOnline(navigator.onLine);
-    setShowOfflineBanner(!navigator.onLine);
-    
-    window.scrollTo(0, 0); // Scroll to top on refresh
+    window.scrollTo(0, 0);
 
     const handleScroll = () => {
-      // Show when scrolled past 50% of the viewport (approaching About section)
-      setShowWhatsApp(window.scrollY > window.innerHeight * 0.5);
+      const scrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      const fullHeight = document.documentElement.scrollHeight;
+      
+      const isPastHero = scrollY > viewportHeight * 0.5;
+      // Hide the floating button when we reach the footer (approx 200px from bottom)
+      const isNearBottom = scrollY + viewportHeight >= fullHeight - 200;
+      
+      setShowWhatsApp(isPastHero && !isNearBottom);
     };
-    // Initial check
     handleScroll();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -44,14 +47,12 @@ function Page() {
 
   // Online / Offline detection
   useEffect(() => {
-    const handleOnline = () => {
-      setIsOnline(true);
-      setShowOfflineBanner(false);
-    };
-    const handleOffline = () => {
-      setIsOnline(false);
-      setShowOfflineBanner(true);
-    };
+    // Set initial state client-side (avoids SSR mismatch)
+    setShowOfflineBanner(!navigator.onLine);
+
+    const handleOnline = () => setShowOfflineBanner(false);
+    const handleOffline = () => setShowOfflineBanner(true);
+
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
     return () => {
@@ -61,7 +62,7 @@ function Page() {
   }, []);
 
   return (
-    <>
+    <MotionConfig reducedMotion="user">
       <Preloader />
       <Navbar installPromptEvent={installPromptEvent} setInstallPromptEvent={setInstallPromptEvent} />
       
@@ -129,6 +130,7 @@ function Page() {
               You're offline — browsing cached content
             </p>
             <button
+              type="button"
               onClick={() => setShowOfflineBanner(false)}
               style={{
                 position: 'absolute',
@@ -161,7 +163,7 @@ function Page() {
             <Skills />
             <Projects />
             <Services />
-            <Suspense fallback={<div style={{ textAlign: 'center', padding: '2rem' }}>Loading more...</div>}>
+            <Suspense fallback={<SkeletonLoader />}>
               <Experience />
               <Certifications />
               <Contact />
@@ -170,7 +172,7 @@ function Page() {
         </main>
         <Footer />
       </div>
-    </>
+    </MotionConfig>
   );
 }
 

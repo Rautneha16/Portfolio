@@ -20,25 +20,29 @@ const contactInfo = [
     icon: <Mail size={28} />,
     title: 'Mail',
     detail: 'gracy.codeanddeploy@gmail.com',
-    link: 'mailto:gracy.codeanddeploy@gmail.com',
+    link: 'mailto:gracy.codeanddeploy@gmail.com?subject=Connecting%20from%20your%20Portfolio&body=Hi%20Neha%2C%0A%0AI%20saw%20your%20portfolio%20and%20would%20like%20to%20connect.%0A%0AMy%20contact%20number%20is%3A%20%0A%0ARegards%2C',
   },
 ];
 
 const Contact = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [message, setMessage] = useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const subject = `Portfolio Message from ${name || 'Visitor'}`;
-    const body = `Name: ${name || 'N/A'}\nEmail: ${email || 'N/A'}\n\n${message || ''}`;
-    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=gracy.codeanddeploy@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.open(gmailUrl, '_blank');
+    const body = `Name: ${name || 'N/A'}\nEmail: ${email || 'N/A'}\nContact Number: ${phone || 'Not provided'}\n\n${message || ''}`;
     
-    // Clear the form fields after redirecting
+    // Natively supported by all browsers — opens the user's default email app
+    const mailtoUrl = `mailto:gracy.codeanddeploy@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoUrl;
+    
+    // Clear the form fields after triggering the mail client
     setName('');
     setEmail('');
+    setPhone('');
     setMessage('');
   };
 
@@ -87,9 +91,18 @@ const Contact = () => {
               whileHover={{ scale: 1.05, y: -10, boxShadow: 'var(--box-shadow-chunky), 0 0 20px rgba(0,255,255,0.3)' }}
               whileTap={{ scale: 0.95 }}
               className="glass-card"
+              role="link"
+              tabIndex={0}
+              aria-label={`${item.title}: ${item.detail}`}
               style={{ textAlign: 'center', padding: '2.5rem 1.5rem', cursor: 'pointer', position: 'relative' }}
               onClick={() => {
                 if (item.link) {
+                  window.open(item.link, item.link.startsWith('http') ? '_blank' : '_self');
+                }
+              }}
+              onKeyDown={(e) => {
+                if ((e.key === 'Enter' || e.key === ' ') && item.link) {
+                  e.preventDefault();
                   window.open(item.link, item.link.startsWith('http') ? '_blank' : '_self');
                 }
               }}
@@ -119,6 +132,7 @@ const Contact = () => {
           ))}
         </div>
 
+
         {/* Contact Form */}
         <motion.div
           variants={fadeInUpVariant}
@@ -143,9 +157,14 @@ const Contact = () => {
                 <input
                   type="text"
                   id="name"
+                  name="name"
                   placeholder="Your Name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  required
+                  aria-required="true"
+                  autoComplete="name"
+                  minLength={2}
                   style={{
                     width: '100%', padding: '0.85rem 1rem',
                     background: 'var(--bg-secondary)',
@@ -164,9 +183,13 @@ const Contact = () => {
                 <input
                   type="email"
                   id="email"
+                  name="email"
                   placeholder="Your Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  required
+                  aria-required="true"
+                  autoComplete="email"
                   style={{
                     width: '100%', padding: '0.85rem 1rem',
                     background: 'var(--bg-secondary)',
@@ -182,13 +205,42 @@ const Contact = () => {
               </div>
             </div>
             <div>
+              <label htmlFor="phone" style={{ display: 'block', marginBottom: '0.4rem', color: 'var(--text-primary)', fontWeight: 800, fontSize: '0.85rem' }}>Contact Number</label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                placeholder="Your Contact Number"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+                aria-required="true"
+                autoComplete="tel"
+                style={{
+                  width: '100%', padding: '0.85rem 1rem',
+                  background: 'var(--bg-secondary)',
+                  border: '2px solid var(--border-color)',
+                  borderRadius: '8px',
+                  color: 'var(--text-primary)',
+                  fontSize: '0.95rem',
+                  outline: 'none', transition: 'border-color 0.3s',
+                }}
+                onFocus={(e) => e.target.style.borderColor = 'var(--accent-primary)'}
+                onBlur={(e) => e.target.style.borderColor = 'var(--border-color)'}
+              />
+            </div>
+            <div>
               <label htmlFor="message" style={{ display: 'block', marginBottom: '0.4rem', color: 'var(--text-primary)', fontWeight: 800, fontSize: '0.85rem' }}>Message</label>
               <textarea
                 id="message"
+                name="message"
                 rows="5"
                 placeholder="Tell me about your project..."
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
+                required
+                aria-required="true"
+                minLength={10}
                 style={{
                   width: '100%', padding: '0.85rem 1rem',
                   background: 'var(--bg-secondary)',

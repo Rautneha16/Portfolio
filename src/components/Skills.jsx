@@ -67,14 +67,21 @@ const Skills = () => {
                       <span style={{ fontWeight: 700, fontSize: '0.95rem' }}>{skill.name}</span>
                       <span className="text-muted" style={{ fontWeight: 600 }}>{skill.level}%</span>
                     </div>
-                    <div style={{
-                      width: '100%',
-                      height: '10px',
-                      background: 'var(--bg-tertiary)',
-                      border: '2px solid var(--border-color)',
-                      borderRadius: '6px',
-                      overflow: 'hidden'
-                    }}>
+                    <div
+                      role="progressbar"
+                      aria-valuenow={skill.level}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      aria-label={`${skill.name} proficiency: ${skill.level}%`}
+                      style={{
+                        width: '100%',
+                        height: '10px',
+                        background: 'var(--bg-tertiary)',
+                        border: '2px solid var(--border-color)',
+                        borderRadius: '6px',
+                        overflow: 'hidden'
+                      }}
+                    >
                       <motion.div
                         initial={{ width: 0 }}
                         whileInView={{ width: `${skill.level}%` }}

@@ -1,85 +1,89 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Laptop, Smartphone, Database, Server, Cpu, Cloud, Code, Monitor, Tablet, HardDrive } from 'lucide-react';
+import { Laptop, Smartphone, Database, Server, Cpu, Cloud, Code, Monitor } from 'lucide-react';
 
-const icons = [Laptop, Smartphone, Database, Server, Cpu, Cloud, Code, Monitor, Tablet, HardDrive];
+const icons = [Laptop, Smartphone, Database, Server, Cpu, Cloud, Code, Monitor];
 
 const AnimatedBackground = () => {
-  // Generate random floating tech models (icons)
-  const models = Array.from({ length: 15 }).map((_, i) => {
+  // Reduced to 8 icons (fewer compositor layers = better scroll performance)
+  const models = useMemo(() => Array.from({ length: 8 }).map((_, i) => {
     const IconComponent = icons[i % icons.length];
     return {
       id: i,
       Icon: IconComponent,
-      size: Math.random() * 40 + 30, // sizes between 30 and 70
-      x: Math.random() * 90, // Keep within 0-90vw
-      y: Math.random() * 90, // Keep within 0-90vh
-      duration: Math.random() * 25 + 15,
-      delay: Math.random() * 5,
+      size: Math.random() * 30 + 24,
+      x: Math.random() * 88,
+      y: Math.random() * 88,
+      duration: Math.random() * 20 + 18,
+      delay: Math.random() * 6,
       rotateStart: Math.random() * 360,
-      rotateEnd: Math.random() * 360 + (Math.random() > 0.5 ? 360 : -360), // spin one full rotation
-      color: i % 2 === 0 ? 'var(--accent-primary)' : 'var(--accent-secondary)'
+      rotateEnd: Math.random() * 360 + (Math.random() > 0.5 ? 360 : -360),
+      color: i % 2 === 0 ? 'var(--accent-primary)' : 'var(--accent-secondary)',
     };
-  });
+  }), []);
 
   return (
-    <div style={{
-      position: 'absolute',
-      inset: 0,
-      overflow: 'hidden',
-      zIndex: 0, // Behind the content
-      pointerEvents: 'none'
-    }}>
-      {/* Cyberpunk grid lines */}
+    <div
+      aria-hidden="true"
+      style={{
+        position: 'absolute',
+        inset: 0,
+        overflow: 'hidden',
+        zIndex: 0,
+        pointerEvents: 'none',
+        // Isolate this layer so scroll repaints don't cascade to parent
+        contain: 'strict',
+      }}
+    >
+      {/* Cyberpunk grid lines — static, no repaint cost */}
       <div style={{
         position: 'absolute',
         inset: 0,
-        backgroundImage: 'linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px)',
+        backgroundImage: 'linear-gradient(rgba(0,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,255,0.025) 1px, transparent 1px)',
         backgroundSize: '40px 40px',
-        backgroundPosition: 'center center',
       }} />
 
-      {/* Floating Tech Models */}
+      {/* Floating Tech Icons
+          Key perf rules:
+          - No filter: drop-shadow (extremely expensive per-frame GPU op)
+          - Only transform: y + rotate (single composite layer operation)
+          - Static opacity (no opacity animation = no layer recalculation)
+          - will-change: transform promotes to GPU compositor layer upfront */}
       {models.map(model => (
         <motion.div
           key={model.id}
-          initial={{ 
-            opacity: 0,
+          initial={{
             x: `${model.x}vw`,
             y: `${model.y}vh`,
-            rotate: model.rotateStart
+            rotate: model.rotateStart,
+            opacity: 0,
           }}
           animate={{
-            opacity: [0, 0.15, 0], // low opacity to stay in background
-            y: [`${model.y}vh`, `${model.y - 30}vh`],
-            x: [`${model.x}vw`, `${model.x + (Math.random() * 10 - 5)}vw`],
-            rotate: [model.rotateStart, model.rotateEnd]
+            y: [`${model.y}vh`, `${model.y - 25}vh`, `${model.y}vh`],
+            rotate: [model.rotateStart, model.rotateEnd],
+            opacity: [0, 0.12, 0.12, 0],
           }}
           transition={{
             duration: model.duration,
             repeat: Infinity,
             delay: model.delay,
-            ease: "linear"
+            ease: 'linear',
           }}
           style={{
             position: 'absolute',
             color: model.color,
-            filter: `drop-shadow(0 0 10px ${model.color})`,
+            // No drop-shadow filter — use color opacity instead for glow feel
+            willChange: 'transform',
           }}
         >
           <model.Icon size={model.size} strokeWidth={1} />
         </motion.div>
       ))}
 
-      {/* Large Glowing Orbs */}
-      <motion.div
-        animate={{ 
-          scale: [1, 1.2, 1],
-          opacity: [0.08, 0.12, 0.08],
-          x: ['0%', '5%', '0%'],
-          y: ['0%', '3%', '0%']
-        }}
-        transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
+      {/* Static glowing orbs — removing animation from blur elements is critical.
+          Animating scale/position on filter:blur(80px)+ elements causes
+          full GPU texture re-upload every frame. Static = zero cost. */}
+      <div
         style={{
           position: 'absolute',
           top: '20%',
@@ -89,17 +93,11 @@ const AnimatedBackground = () => {
           borderRadius: '50%',
           background: 'radial-gradient(circle, var(--accent-primary) 0%, transparent 70%)',
           filter: 'blur(80px)',
+          opacity: 0.09,
+          willChange: 'auto',
         }}
       />
-      
-      <motion.div
-        animate={{ 
-          scale: [1, 1.3, 1],
-          opacity: [0.06, 0.1, 0.06],
-          x: ['0%', '-5%', '0%'],
-          y: ['0%', '-3%', '0%']
-        }}
-        transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+      <div
         style={{
           position: 'absolute',
           bottom: '10%',
@@ -109,6 +107,8 @@ const AnimatedBackground = () => {
           borderRadius: '50%',
           background: 'radial-gradient(circle, var(--accent-secondary) 0%, transparent 70%)',
           filter: 'blur(100px)',
+          opacity: 0.07,
+          willChange: 'auto',
         }}
       />
     </div>
@@ -116,3 +116,4 @@ const AnimatedBackground = () => {
 };
 
 export default AnimatedBackground;
+
