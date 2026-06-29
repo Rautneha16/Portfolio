@@ -757,8 +757,9 @@ html.dark .glow-blob {
    For budget GPUs (e.g. Snapdragon 4 series)
 ========================================= */
 @media (max-width: 768px) {
+
   /* Disable expensive backdrop-filter (glassmorphism) on mobile */
-  .glass-card, 
+  .glass-card,
   .navbar-container,
   .form-popup-modal,
   .whatsapp-fab {
@@ -766,10 +767,10 @@ html.dark .glow-blob {
     -webkit-backdrop-filter: none !important;
     background-color: rgba(15, 10, 35, 0.98) !important;
   }
-  
+
   /* Disable heavy continuous drop-shadows on mobile */
   .hero-code-card {
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
   }
 
   /* Utility to hide extremely heavy components on mobile completely */
