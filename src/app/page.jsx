@@ -68,7 +68,7 @@ function Page() {
       
       {/* Floating WhatsApp FAB with animations */}
       <motion.a
-        href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hi%20Neha!%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect.`}
+        href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hi Neha! I came across your profile and was impressed by your work. I'd love to connect.")}`}
         target="_blank"
         rel="noopener noreferrer"
         className="whatsapp-fab"

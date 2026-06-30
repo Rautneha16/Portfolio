@@ -66,6 +66,17 @@ html.dark, body.dark {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  cursor: default;
+}
+
+/* Enable hand cursor for interactive elements */
+a, button, [role="button"], input[type="submit"], input[type="button"], select {
+  cursor: pointer;
+}
+
+/* Only show 'I' text cursor in actual input fields */
+input[type="text"], input[type="email"], input[type="tel"], input[type="password"], input[type="number"], textarea {
+  cursor: text;
 }
 
 /* Custom Selection style (Josh's signature pink select) */
@@ -170,15 +181,21 @@ ul {
 
 /* Layout Utilities */
 .section {
-  padding: 3rem 1rem;
-  max-width: 1100px;
+  width: min(92%, 1400px);
   margin: 0 auto;
+  padding: 3rem 0;
   position: relative;
+}
+
+@media (min-width: 1600px) {
+  .section {
+    width: min(92%, 1500px);
+  }
 }
 
 @media (max-width: 768px) {
   .section {
-    padding: 2rem 0.5rem;
+    padding: 2rem 0;
     /* Skip rendering off-screen sections until near viewport */
     content-visibility: auto;
     contain-intrinsic-size: 0 600px;
@@ -192,10 +209,28 @@ ul {
 }
 
 .container {
-  width: 100%;
-  max-width: 1100px;
+  width: min(92%, 1400px);
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0;
+}
+
+@media (min-width: 1600px) {
+  .container {
+    width: min(92%, 1500px);
+  }
+}
+
+/* About Section Left Column Balance */
+.about-left-col {
+  display: flex;
+  justify-content: center;
+}
+
+@media (min-width: 1024px) {
+  .about-left-col {
+    justify-content: flex-start;
+    padding-left: clamp(2rem, 5vw, 5rem);
+  }
 }
 
 /* --- Glitch Effect --- */

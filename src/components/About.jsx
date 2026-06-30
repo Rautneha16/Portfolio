@@ -61,7 +61,28 @@ const About = () => {
   ];
 
   return (
-    <section id="about" className="section" style={{ paddingBottom: '10vh' }}>
+    <section id="about" className="section">
+      <style>{`
+        .about-left-col {
+          display: flex;
+          justify-content: center;
+        }
+        @media (min-width: 1024px) {
+          .about-left-col {
+            justify-content: flex-start !important;
+            padding-left: clamp(1rem, 4vw, 4rem) !important;
+          }
+        }
+      `}</style>
+      <motion.div
+        variants={fadeInUpVariant}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+      >
+        <h2 className="heading-lg">About <span className="text-gradient">Me</span></h2>
+      </motion.div>
+
       <motion.div
         variants={fadeInUpVariant}
         initial="hidden"
@@ -76,7 +97,7 @@ const About = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            style={{ display: 'flex', justifyContent: 'center' }}
+            className="about-left-col"
           >
             <div style={{ position: 'relative' }}>
               {/* Decorative background shape */}
@@ -157,27 +178,15 @@ const About = () => {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <span style={{
-              fontWeight: 800,
-              fontSize: '0.85rem',
-              color: 'var(--accent-primary)',
-              textTransform: 'uppercase',
-              letterSpacing: '0.15em',
-              marginBottom: '0.75rem',
-              display: 'block',
-            }}>
-              ABOUT ME
-            </span>
-
-            <h2 style={{
+            <h3 style={{
               fontWeight: 900,
-              fontSize: 'clamp(1.8rem, 3vw, 2.5rem)',
+              fontSize: 'clamp(1.5rem, 2.5vw, 2rem)',
               color: 'var(--text-primary)',
               marginBottom: '1.5rem',
               lineHeight: 1.2,
             }}>
               Web Developer & Designer
-            </h2>
+            </h3>
 
             <p className="text-muted" style={{
               fontSize: '1.05rem', lineHeight: 1.8, marginBottom: '1rem',
@@ -214,10 +223,16 @@ const About = () => {
                   }}
                 >
                   <motion.span
-                    whileHover={{ scale: 1.3, rotate: 15 }}
-                    style={{ color: 'var(--accent-primary)', fontSize: '1.1rem', display: 'inline-block' }}
-                  >⚪
-                  </motion.span>
+                    whileHover={{ scale: 1.3 }}
+                    style={{ 
+                      width: '10px', 
+                      height: '10px', 
+                      borderRadius: '50%', 
+                      backgroundColor: 'var(--accent-primary)', 
+                      display: 'inline-block',
+                      flexShrink: 0
+                    }}
+                  />
                   {item}
                 </motion.div>
               ))}

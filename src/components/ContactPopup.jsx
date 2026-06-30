@@ -32,6 +32,17 @@ const ContactPopup = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!name.trim() || !email.trim() || !message.trim()) {
+      alert("Please fill out all required fields (Name, Email, Message).");
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
     setStatus('sending');
 
     if (USE_EMAILJS) {
@@ -68,6 +79,13 @@ const ContactPopup = ({ onClose }) => {
     const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=gracy.codeanddeploy@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.open(gmailUrl, '_blank');
     setStatus('success');
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      document.getElementById('popupSubmitBtn').click();
+    }
   };
 
   return (
@@ -177,6 +195,7 @@ const ContactPopup = ({ onClose }) => {
                     }}
                     onFocus={(e) => e.target.style.borderColor = 'var(--accent-primary)'}
                     onBlur={(e)  => e.target.style.borderColor = 'var(--border-color)'}
+                    onKeyDown={handleKeyDown}
                   />
                 </div>
                 <div>
@@ -205,6 +224,7 @@ const ContactPopup = ({ onClose }) => {
                     }}
                     onFocus={(e) => e.target.style.borderColor = 'var(--accent-primary)'}
                     onBlur={(e)  => e.target.style.borderColor = 'var(--border-color)'}
+                    onKeyDown={handleKeyDown}
                   />
                 </div>
               </div>
@@ -230,7 +250,21 @@ const ContactPopup = ({ onClose }) => {
                     <button
                       key={sug.label}
                       type="button"
-                      onClick={() => setMessage(sug.text)}
+                      onClick={() => {
+                        if (sug.text) {
+                          setMessage(sug.text + ' ');
+                        } else {
+                          setMessage('');
+                        }
+                        setTimeout(() => {
+                          const el = document.getElementById('popup-message');
+                          if (el) {
+                            el.focus();
+                            const len = el.value.length;
+                            el.setSelectionRange(len, len);
+                          }
+                        }, 50);
+                      }}
                       style={{
                         background: (message === sug.text && sug.text !== '') ? 'var(--accent-primary)' : 'var(--bg-tertiary)',
                         color: (message === sug.text && sug.text !== '') ? '#fff' : 'var(--text-secondary)',
@@ -279,6 +313,7 @@ const ContactPopup = ({ onClose }) => {
 
               <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.25rem' }}>
                 <button
+                  id="popupSubmitBtn"
                   type="submit"
                   disabled={status === 'sending'}
                   className="btn btn-primary"

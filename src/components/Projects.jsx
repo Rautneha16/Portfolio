@@ -5,6 +5,7 @@ import TiltCard from './TiltCard';
 import lockImage from './images/lock.jpg';
 import otpImage from './images/otp.jpeg';
 import constructionImage from './images/construction.jpeg';
+import driveImage from './images/drive.jpg';
 import { fadeInUpVariant } from '../utils/animations';
 
 const Projects = () => {
@@ -36,7 +37,7 @@ const Projects = () => {
       description: "An engaging game design and web design project combining interactive gameplay elements with a stunning modern interface.",
       tech: ["ReactJS", "Framer Motion", "TailwindCSS"],
       category: "Web",
-      image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+      image: driveImage,
       githubLink: "https://github.com/Rautneha16/Drive-Throw"
     },
     {
@@ -66,25 +67,7 @@ const Projects = () => {
       >
         {/* Section label */}
         <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-          <span style={{
-            fontWeight: 800,
-            fontSize: '0.85rem',
-            color: 'var(--accent-primary)',
-            textTransform: 'uppercase',
-            letterSpacing: '0.15em',
-            marginBottom: '0.75rem',
-            display: 'block',
-          }}>
-            PORTFOLIO
-          </span>
-          <h2 style={{
-            fontWeight: 900,
-            fontSize: 'clamp(1.8rem, 3vw, 2.5rem)',
-            color: 'var(--text-primary)',
-            lineHeight: 1.2,
-          }}>
-            Featured Creations
-          </h2>
+          <h2 className="heading-lg">Featured <span className="text-gradient">Projects</span></h2>
         </div>
 
         {/* Filter Bar */}

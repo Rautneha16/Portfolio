@@ -168,7 +168,7 @@ const Hero = () => {
               textShadow: '0 0 30px rgba(255,42,122,0.5), 0 0 60px rgba(124,59,237,0.3)',
               letterSpacing: '0.06em',
             }}>
-              <span className="text-gradient glitch" data-text="Neha Raut">Neha Raut</span>
+              <span className="text-gradient">Neha Raut</span>
             </h1>
 
             <p style={{

@@ -30,31 +30,28 @@ const Services = () => {
         transition={{ duration: 0.6 }}
         viewport={{ once: true }}
       >
+        <h2 className="heading-lg">My <span className="text-gradient">Services</span></h2>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        viewport={{ once: true }}
+      >
         <div className="grid grid-2" style={{ gap: '4rem', alignItems: 'flex-start' }}>
 
           {/* Left Column — Skills */}
           <div>
-            <span style={{
-              fontWeight: 800,
-              fontSize: '0.85rem',
-              color: 'var(--accent-primary)',
-              textTransform: 'uppercase',
-              letterSpacing: '0.15em',
-              marginBottom: '0.75rem',
-              display: 'block',
-            }}>
-              SERVICES
-            </span>
-
-            <h2 style={{
+            <h3 style={{
               fontWeight: 900,
-              fontSize: 'clamp(1.8rem, 3vw, 2.5rem)',
+              fontSize: 'clamp(1.5rem, 2.5vw, 2rem)',
               color: 'var(--text-primary)',
               marginBottom: '1.5rem',
               lineHeight: 1.2,
             }}>
               I offer a Full-cycle of Web Development Services
-            </h2>
+            </h3>
 
             <p className="text-muted" style={{
               fontSize: '1.05rem', lineHeight: 1.8, marginBottom: '2rem'
@@ -63,7 +60,7 @@ const Services = () => {
             </p>
 
             {/* Progress Bar Skills */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <div className="skills-mobile-card" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
               {skills.map((skill, i) => (
                 <motion.div
                   key={skill.name}
