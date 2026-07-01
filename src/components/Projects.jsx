@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Github } from 'lucide-react';
+import Image from 'next/image';
 import TiltCard from './TiltCard';
 import lockImage from './images/lock.jpg';
 import otpImage from './images/otp.jpeg';
@@ -113,13 +114,10 @@ const Projects = () => {
                   style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '100%' }}
                 >
                   <div style={{ position: 'relative', height: 'clamp(180px, 25vh, 220px)', overflow: 'hidden', borderBottom: '2px solid var(--border-color)' }}>
-                    <img
-                      src={project.image.src || project.image}
+                    <Image
+                      src={project.image}
                       alt={project.title}
                       loading="lazy"
-                      decoding="async"
-                      width={800}
-                      height={220}
                       style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
                       onMouseOver={(e) => e.target.style.transform = 'scale(1.08)'}
                       onMouseOut={(e) => e.target.style.transform = 'scale(1)'}

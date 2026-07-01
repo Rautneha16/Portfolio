@@ -1,22 +1,24 @@
 "use client";
 
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { motion, MotionConfig } from 'framer-motion';
+import dynamic from 'next/dynamic';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
-import About from '../components/About';
-import Skills from '../components/Skills';
-import Projects from '../components/Projects';
-import Services from '../components/Services';
-import Footer from '../components/Footer';
 import PWARegistration from '../components/PWARegistration';
 import Preloader from '../components/Preloader';
-import AnimatedBackground from '../components/AnimatedBackground';
 import SkeletonLoader from '../components/SkeletonLoader';
 
-const Experience = lazy(() => import('../components/Experience'));
-const Certifications = lazy(() => import('../components/Certifications'));
-const Contact = lazy(() => import('../components/Contact'));
+const About = dynamic(() => import('../components/About'));
+const Skills = dynamic(() => import('../components/Skills'));
+const Projects = dynamic(() => import('../components/Projects'));
+const Services = dynamic(() => import('../components/Services'));
+const Footer = dynamic(() => import('../components/Footer'));
+const AnimatedBackground = dynamic(() => import('../components/AnimatedBackground'), { ssr: false });
+
+const Experience = dynamic(() => import('../components/Experience'));
+const Certifications = dynamic(() => import('../components/Certifications'));
+const Contact = dynamic(() => import('../components/Contact'));
 
 const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '917420008485';
 

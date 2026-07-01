@@ -37,20 +37,35 @@ export const metadata = {
 };
 
 import logoImage from '../components/images/logo.png';
+import { Orbitron, Share_Tech_Mono, Poppins } from 'next/font/google';
+
+const orbitron = Orbitron({
+  subsets: ['latin'],
+  weight: ['700', '900'],
+  display: 'swap',
+  variable: '--font-orbitron',
+});
+
+const shareTechMono = Share_Tech_Mono({
+  subsets: ['latin'],
+  weight: ['400'],
+  display: 'swap',
+  variable: '--font-share-tech-mono',
+});
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '600', '700', '800'],
+  display: 'swap',
+  variable: '--font-poppins',
+});
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="dark">
       <head>
         <link rel="icon" href={logoImage.src} />
-        {/* Preconnect for faster font loading */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Trimmed to only the 3 font families actually used, with minimal weights */}
-        <link
-          href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Share+Tech+Mono&family=Poppins:wght@400;600;700;800&display=swap"
-          rel="stylesheet"
-        />
+
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -58,7 +73,7 @@ export default function RootLayout({ children }) {
         <meta name="application-name" content="Neha Raut" />
         <meta name="msapplication-TileColor" content="#ff2a7a" />
       </head>
-      <body>
+      <body className={`${orbitron.variable} ${shareTechMono.variable} ${poppins.variable}`}>
         {children}
       </body>
     </html>

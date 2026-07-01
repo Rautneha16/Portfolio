@@ -3,6 +3,7 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 
 const TiltCard = ({ children, className = '', style = {}, ...props }) => {
   const ref = useRef(null);
+  const rectRef = useRef(null);
   
   // Track mouse position relative to the center of the card
   const x = useMotionValue(0);
@@ -16,9 +17,18 @@ const TiltCard = ({ children, className = '', style = {}, ...props }) => {
   const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["7.5deg", "-7.5deg"]);
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-7.5deg", "7.5deg"]);
 
+  const handleMouseEnter = () => {
+    if (ref.current) {
+      rectRef.current = ref.current.getBoundingClientRect();
+    }
+  };
+
   const handleMouseMove = (e) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
+    if (!rectRef.current) {
+      if (ref.current) rectRef.current = ref.current.getBoundingClientRect();
+      else return;
+    }
+    const rect = rectRef.current;
     
     const width = rect.width;
     const height = rect.height;
@@ -42,6 +52,7 @@ const TiltCard = ({ children, className = '', style = {}, ...props }) => {
   return (
     <motion.div
       ref={ref}
+      onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{

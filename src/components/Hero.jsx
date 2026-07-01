@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, Mail } from 'lucide-react';
+import Image from 'next/image';
 import avatarImage from './images/avatar.png';
 import heroVideo from './images/video/video.mp4'; 
 
@@ -314,10 +315,11 @@ const Hero = () => {
                   boxShadow: 'var(--box-shadow-chunky-hover)',
                 }}
               >
-                <img
-                  src={avatarImage.src}
+                <Image
+                  src={avatarImage}
                   alt="Neha Raut Cartoon Avatar"
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  priority={true}
                 />
               </motion.div>
 

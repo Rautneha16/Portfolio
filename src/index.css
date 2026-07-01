@@ -140,7 +140,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Space Grotesk', 'Orbitron', 'Poppins', sans-serif;
+  font-family: 'Space Grotesk', var(--font-orbitron), var(--font-poppins), sans-serif;
   line-height: 1.25;
   color: var(--text-primary);
   font-weight: normal;
@@ -444,7 +444,7 @@ ul {
   border-radius: 8px;
   font-weight: 800;
   font-size: 0.95rem;
-  font-family: 'Poppins', 'Inter', sans-serif;
+  font-family: var(--font-poppins), 'Inter', sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.03em;
   transition: var(--transition);
@@ -586,7 +586,7 @@ ul {
   color: #fff;
   font-size: 0.8rem;
   font-weight: 700;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   padding: 0.35rem 0.75rem;
   border-radius: 6px;
   white-space: nowrap;

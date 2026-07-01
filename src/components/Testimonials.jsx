@@ -91,13 +91,13 @@ const Testimonials = () => {
                     }}
                   />
                   <div>
-                    <h4 style={{
+                    <h3 style={{
                       fontFamily: "'Cyberpunk', sans-serif",
                       fontWeight: 800,
                       color: 'var(--text-primary)',
                       fontSize: '1.1rem',
                       marginBottom: '0.2rem'
-                    }}>{testimonial.name}</h4>
+                    }}>{testimonial.name}</h3>
                     <p className="text-muted" style={{ fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{testimonial.role}</p>
                   </div>
                 </div>

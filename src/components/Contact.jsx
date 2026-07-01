@@ -271,6 +271,7 @@ const InteractiveContactCard = ({ item }) => {
       onClick={() => window.open(item.link, item.link.startsWith('http') ? '_blank' : '_self')}
       className="glass-card contact-card-interactive"
       role="link"
+      aria-label={`Open ${item.title} link`}
       tabIndex={0}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {

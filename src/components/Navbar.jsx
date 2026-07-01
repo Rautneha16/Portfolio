@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Download } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 import logoImage from './images/logo.png';
 
 const Navbar = ({ installPromptEvent, setInstallPromptEvent }) => {
@@ -75,12 +76,13 @@ const Navbar = ({ installPromptEvent, setInstallPromptEvent }) => {
             textDecoration: 'none'
           }}
         >
-          <img 
-            src={logoImage.src ? logoImage.src : logoImage} 
+          <Image 
+            src={logoImage} 
             alt="Neha Raut logo" 
             className="navbar-logo-img"
             style={{ borderRadius: '50%', objectFit: 'cover' }} 
             onError={(e) => { e.target.style.display = 'none'; }}
+            priority={true}
           />
           <AnimatePresence>
             {!isPastHero && (

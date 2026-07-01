@@ -120,12 +120,12 @@ const ContactPopup = ({ onClose }) => {
             }}>
               <span style={{ fontSize: '2rem' }}>🎉</span>
             </div>
-            <h3 style={{
+            <h2 style={{
               fontFamily: "'Poppins', sans-serif", fontWeight: 900,
               fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '0.75rem',
             }}>
               Message Sent!
-            </h3>
+            </h2>
             <p className="text-muted" style={{ fontFamily: "'Inter', sans-serif", fontSize: '1rem', lineHeight: 1.7, marginBottom: '2rem' }}>
               Thanks for reaching out! Neha will get back to you soon. 🚀
             </p>
