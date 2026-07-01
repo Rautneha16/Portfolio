@@ -46,6 +46,13 @@ const MagneticButton = ({ children, status, onClick, type = "button", disabled =
     y.set(0);
   };
 
+  useEffect(() => {
+    if (status !== 'idle' || disabled) {
+      x.set(0);
+      y.set(0);
+    }
+  }, [status, disabled, x, y]);
+
   return (
     <motion.button
       ref={ref}
@@ -551,9 +558,9 @@ const Contact = () => {
             
             <motion.div variants={itemVariants} style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center', width: '100%' }}>
               <motion.div 
-                animate={{ width: status === 'loading' || status === 'success' ? '60px' : '100%' }}
+                animate={{ width: status === 'loading' || status === 'success' ? 60 : '100%' }}
                 transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                style={{ overflow: 'hidden', display: 'flex', justifyContent: 'center' }}
+                style={{ overflow: 'hidden', display: 'flex', justifyContent: 'center', margin: '0 auto', maxWidth: '100%' }}
               >
                 <MagneticButton id="submitBtn" type="submit" status={status}>
                   Send Request
